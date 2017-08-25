@@ -1,0 +1,22 @@
+<html>
+
+<head>
+    <script src="jwplayer.js"></script>
+    <script>
+        jwplayer.key = "iP+vLYU9H5KyhZeGt5eVuJJIoULUjltoaMeHXg==";
+    </script>
+</head>
+
+<body>
+    <div id='myplayer'></div>
+    <script type='text/javascript'>
+        jwplayer('myplayer').setup({
+            flashplayer:'./jwplayer.flash.swf',
+            file: 'rtmp://live.hkstv.hk.lxdns.com/live/hks',
+            width: '640',
+            height: '480'
+        });
+    </script>
+</body>
+
+</html>
