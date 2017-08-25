@@ -5,6 +5,10 @@ Adobe Media Server 5（AMS）的安装及使用
 2. 安装时 会配置端口
 3.点击 AMSAdmin.exe  会进行启动
 4. 在直播项目 会有“推流”的问题  
+推流意义在于将本地的视频文件转化为流  推动出去  
+    举例  ffmpeg -re -i 800600.mp4 -c copy -f flv rtmp://loclahost/live/livestream
+    这个命令就是在 降本地的800600.mp4视频 推动到 rtmp://loclahost/live/livestream 
+    通过rtmp://loclahost/live/livestream 我们就可以将视频直播出来
  推荐使用 FFmepg  推流 因为 FFmepg  可以解决 视频协议的转化问题  例如 rtsp 转化为 rtmp
 5 下载 FFmepg  
 https://ffmpeg.org/download.html
