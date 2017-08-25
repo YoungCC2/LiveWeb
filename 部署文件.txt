@@ -1,0 +1,22 @@
+1.解决 Flash plugin failed to load  的问题。将项目放在AMS（Adobe Media Server）服务器中
+Adobe Media Server 5（AMS）的安装及使用 
+1.下载http://www.adobe.com/support/flashmediaserver/downloads_updaters.html
+  注册码 1652-5826-9939-6068-8981-7289
+2. 安装时 会配置端口
+3.点击 AMSAdmin.exe  会进行启动
+4. 在直播项目 会有“推流”的问题  
+ 推荐使用 FFmepg  推流 因为 FFmepg  可以解决 视频协议的转化问题  例如 rtsp 转化为 rtmp
+5 下载 FFmepg  
+https://ffmpeg.org/download.html
+
+启动推流时 需要在命令行执行 对应的命令
+
+转化 命令
+ffmpeg -i "rtsp地址" -f mp4 -muxdelay 5 -vcodec copy -r 25 -s 1080x720 -b:v 64k  -an -f flv "rtmp地址"
+截图命令
+ffmpeg -i "视频流地址" -y -f image2 -ss 00.000 -t 0.001 -s 1080x720 b.jpg
+
+6. 将项目 放在AMD文件夹下面的\webroot 文件夹
+http://localhost/obj/index.html
+
+附:  测试 视频流  rtmp://live.hkstv.hk.lxdns.com/live/hks
