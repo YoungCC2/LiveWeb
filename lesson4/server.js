@@ -5,11 +5,13 @@ var utility = require('utility');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
 var mkdirp = require('mkdirp');
-var fs = require('fs');  
+var async  = require('async');
+var path  = require('path');
+var fs = require('fs');
 var app = express();
 var conf = require('./conf.json');
 var imgSrc = require('./src.json');
-var cookir ;
+var cookir;
 app.get('/', function (req, res, next) {
     var base_headers = {
         Accept: '*/*',
@@ -60,15 +62,16 @@ app.get('/home', function (req, res, next) {
         'Accept-Language': 'zh-CN,zh;q=0.8',
         'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
-        Cookie: 'q_c1=f17d446552694d5fbbf0af2ab7619a0a|1504753247000|1504753247000; d_c0="AJBCKcWlVgyPTvVdkjkV8YLnZgvgvUcZpSE=|1504753248"; _zap=d719f1f5-26c3-4d96-94a0-b4c90e5c8859; r_cap_id="NjhlNWYzNDgwMWZiNDJlNGJkNGNkZDBhNTgwNjEzNmI=|1504753993|0e70a70a135f80b938a4f5c5b1302becefcaeefc"; cap_id="ZTBhOGI3NjZkYzIyNGY1YzgxYTVlNjhhOTFkMDkwY2M=|1504753993|79abac452198f777371b1c977310c7288d113c78"; z_c0=Mi4xYzhZTEFBQUFBQUFBa0VJcHhhVldEQmNBQUFCaEFsVk5UMGpZV1FDRWRKajUzZlhjRV9fZjlIcFNuSUtMa3NOcTFR|1504754511|065c87cce59c0589bcbffd22c14cef97450d09f1; aliyungf_tc=AQAAACB1ohSpiAUAY6dVfS/yvIMAh4Zh; __utma=51854390.1519459293.1504753249.1504774315.1504834535.6; __utmb=51854390.0.10.1504834535; __utmc=51854390; __utmz=51854390.1504834535.6.5.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1; _xsrf=a62366c8-a88c-456c-8024-df276212f00c',
+        Cookie: 'q_c1=252899e930f84ddebdab2ee6cfb26913|1504792285000|1504792285000; r_cap_id="YzFkM2RhYmRlNmE3NGQ5YTk2YjgzNzQ0OWQ2ZDk3NTE=|1504792285|3ad220487341beb09eea44fbe443d7203ddb7ba7"; cap_id="MGJmMzkyYjlkM2YxNDE0N2IyZWIxYzJhMGUwYzc3OGE=|1504792285|b1be3833ddbc9291f2e53aef9913175de717128c"; d_c0="AIDCNbA6VwyPTqRedlx1g_TfZzxNq5xkM8o=|1504792286"; _zap=280af8f7-2c88-4e6f-8184-19c3773d75a1; z_c0=Mi4xYzhZTEFBQUFBQUFBZ01JMXNEcFhEQmNBQUFCaEFsVk43dHZZV1FCNUJKY09QNnFJZFc5dGxUQ3pEZ3ZiMFc2bXln|1504792302|413d48023cd2f03a178c8db6675fc0a76cdc5e64; aliyungf_tc=AQAAAOCocVgB9w4AdV34cZpUDYI7GlWb; _xsrf=5ecbfef3-7209-437a-8332-a6c6be797c37; __utma=51854390.397423546.1504792265.1504792265.1504924833.2; __utmb=51854390.0.10.1504924833; __utmc=51854390; __utmz=51854390.1504924833.2.2.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1',
         Host: 'www.zhihu.com',
         Referer: 'https://www.zhihu.com/',
         'Upgrade-Insecure-Requests': 1,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
     }
     var items = [];
+
     function req(i) {
-        var url = 'https://www.zhihu.com/collection/61913303?page=' + i;
+        var url = 'https://www.zhihu.com/collection/68728362?page=' + i;
         request
             .get(url)
             .set(base_header)
@@ -80,9 +83,19 @@ app.get('/home', function (req, res, next) {
 
                 $('#zh-list-collection-wrap .zm-item').each(function (idx, element) {
                     var $toggle = $(element).find('.toggle-expand');
-                    items.push({
-                        title: $toggle.attr('href')
-                    });
+                    var imgUrl = $toggle.attr('href'); 
+                    if (imgUrl) {
+                        if (imgUrl.indexOf('https') === -1) {
+                            imgUrl = 'https://www.zhihu.com' + imgUrl;
+                            items.push({
+                                title: imgUrl
+                            });
+                        } else {
+                            items.push({
+                                title: imgUrl
+                            });
+                        }
+                    }
                 });
                 fs.writeFile('./test2.json', JSON.stringify(items), function (err) {
                     if (err) {
@@ -91,9 +104,9 @@ app.get('/home', function (req, res, next) {
                         console.log(i);
                     }
                 });
-                if(i==116){
+                if (i == 6) {
                     res.send('ok');
-                }else{
+                } else {
                     i++;
                     req(i);
                 }
@@ -104,119 +117,113 @@ app.get('/home', function (req, res, next) {
 });
 
 app.get('/img', function (req, res, next) {
-    var baseheader = {
-        Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Accept-Language': 'zh-CN,zh;q=0.8',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-        Cookie: 'q_c1=f17d446552694d5fbbf0af2ab7619a0a|1504753247000|1504753247000; d_c0="AJBCKcWlVgyPTvVdkjkV8YLnZgvgvUcZpSE=|1504753248"; _zap=d719f1f5-26c3-4d96-94a0-b4c90e5c8859; r_cap_id="NjhlNWYzNDgwMWZiNDJlNGJkNGNkZDBhNTgwNjEzNmI=|1504753993|0e70a70a135f80b938a4f5c5b1302becefcaeefc"; cap_id="ZTBhOGI3NjZkYzIyNGY1YzgxYTVlNjhhOTFkMDkwY2M=|1504753993|79abac452198f777371b1c977310c7288d113c78"; z_c0=Mi4xYzhZTEFBQUFBQUFBa0VJcHhhVldEQmNBQUFCaEFsVk5UMGpZV1FDRWRKajUzZlhjRV9fZjlIcFNuSUtMa3NOcTFR|1504754511|065c87cce59c0589bcbffd22c14cef97450d09f1; aliyungf_tc=AQAAACB1ohSpiAUAY6dVfS/yvIMAh4Zh; anc_cap_id=bbfe20f016e74449b25db35c22eed358; __utma=51854390.1519459293.1504753249.1504850713.1504852601.9; __utmc=51854390; __utmz=51854390.1504852601.9.8.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/collections; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1; _xsrf=a62366c8-a88c-456c-8024-df276212f00c',
-        Host: 'www.zhihu.com',
-        Pragma: 'no-cache',
-        'Upgrade-Insecure-Requests': 1,
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
-    }
-    var topicUrls = conf;
-    function df(){
-        var data = [];
-        topicUrls.forEach(function (topicUrl, k) {
-            if (topicUrl['title']) {
-                topicUrl = topicUrl['title'] + '';
-                if (topicUrl.slice(0, 1) === '/') {
-                    topicUrl = 'https://www.zhihu.com' + topicUrl;
-                }
-                data[k] = topicUrl;
-            }
-        });
-        return data;
-    }
-    df();
-    var items = [];
-    function req(i) {
-        if (df()[i]) {
-            request
-                .get(df()[i])
-                .set(baseheader)
-                .end(function (err, sres) {
-                    if (err) {
-                        console.log(i);
-                        req(i);
-                        //                        return next(err);
-                    } else {
-                        var $ = cheerio.load(sres.text);
-                        $(".Question-mainColumn .QuestionAnswer-content .RichContent-inner noscript img").each(function (indx, ele) {
-                            var $ele = $(ele);
-                            items.push({
-                                src: $ele.attr('data-original')
-                            });
-                        })
-                        fs.writeFile('./src02.json', JSON.stringify(items), function (err) {
-                            if (err) {
-                                throw err;
-                            } else {
-                                console.log(df()[i],i);
-                            }
-                        });
-                        if (i == 1200) {
-                            res.send('ok');
-                            return 0;
-                        } else {
-                            i++;
-                            return setTimeout(function () {
-                                req(i);
-                            }, 2000)
-                        }
-                    }
-                })
-        } else {
-            i++;
-            return setTimeout(function () {
-                req(i);
-            }, 2000)
-        }
-    }
-    req(0);
-})
-
-app.get('/downloadImg',function(req, res, next){
-    var Uurl = imgSrc;
     
-    //本地存储目录
-	var dir = './images';
-	 
-	//创建目录
-	mkdirp(dir, function(err) {
-		if(err){
-			console.log(err);
-		}
-	});
-
-    var download = function(url, dir, filename){
-		/*est.head(url, function(err, res, body){
-            if (!err && res.statusCode == 200) {
-                est(url).pipe(fs.createWriteStream(dir + "/" + filename));
-            }else if(err){
-                console.log('sd');
-                return next(err);
-            }
-		});*/
+    var topicUrls = conf;
+    var items = [];
+    function requestFun(url,callback) {
+        var baseheader = {
+            Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Accept-Language': 'zh-CN,zh;q=0.8',
+            'Cache-Control': 'no-cache',
+            Connection: 'keep-alive',
+            Cookie: 'q_c1=252899e930f84ddebdab2ee6cfb26913|1504792285000|1504792285000; r_cap_id="YzFkM2RhYmRlNmE3NGQ5YTk2YjgzNzQ0OWQ2ZDk3NTE=|1504792285|3ad220487341beb09eea44fbe443d7203ddb7ba7"; cap_id="MGJmMzkyYjlkM2YxNDE0N2IyZWIxYzJhMGUwYzc3OGE=|1504792285|b1be3833ddbc9291f2e53aef9913175de717128c"; d_c0="AIDCNbA6VwyPTqRedlx1g_TfZzxNq5xkM8o=|1504792286"; _zap=280af8f7-2c88-4e6f-8184-19c3773d75a1; z_c0=Mi4xYzhZTEFBQUFBQUFBZ01JMXNEcFhEQmNBQUFCaEFsVk43dHZZV1FCNUJKY09QNnFJZFc5dGxUQ3pEZ3ZiMFc2bXln|1504792302|413d48023cd2f03a178c8db6675fc0a76cdc5e64; aliyungf_tc=AQAAAOCocVgB9w4AdV34cZpUDYI7GlWb; _xsrf=5ecbfef3-7209-437a-8332-a6c6be797c37; __utma=51854390.397423546.1504792265.1504792265.1504924833.2; __utmb=51854390.0.10.1504924833; __utmc=51854390; __utmz=51854390.1504924833.2.2.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1',
+            Host: 'www.zhihu.com',
+            Pragma: 'no-cache',
+            'Upgrade-Insecure-Requests': 1,
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
+        }
         request
             .get(url)
+            .set(baseheader)
             .end(function (err, sres) {
-                request(url).pipe(fs.createWriteStream(dir + "/" + filename));
+                if (err) {
+                    console.log('err',i);
+                    return next(err);
+                } else {
+                    var $ = cheerio.load(sres.text);
+                    $(".Question-mainColumn .QuestionAnswer-content .RichContent-inner noscript img").each(function (indx, ele) {
+                        var $ele = $(ele);
+                        items.push({
+                            src: $ele.attr('data-original')
+                        });
+                    })
+                    fs.writeFile('./src.json', JSON.stringify(items), function (err) {
+                        if (err) {
+                            throw err;
+                        } else {
+                            console.log('success');
+                            callback(null, "successful !");
+                        }
+                    });
+                    
+                }
             })
-	};
-    Uurl.forEach(function (src) {
-        if(src['src']){
-            src['src'] = src['src']+'';
-            download(src['src'], dir, src['src'].substr(-38,32) + src['src'].substr(-4, 4));
-            console.log('下载完成',src['src'].substr(-38,32));
+    }
+        var downloadImg = function (asyncNum) {
+            console.log("即将异步并发下载图片，当前并发数为:" + asyncNum);
+            async.mapLimit(topicUrls, asyncNum, function (photo, callback) {
+                console.log("已有" + asyncNum + "张图片进入下载队列");
+                if (photo['title']) {
+                    requestFun(photo['title'], callback);
+                }
+            }, function (err, result) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    // console.log(result);<=会输出一个有2万多个“successful”字符串的数组
+                    console.log("全部已下载完毕！");
+                }
+            });
+        };
+        downloadImg(10);
+    
+})
 
-        }
-    });
-});
+function down(imgSrc) {
+    var Uurl = imgSrc;
+    var requestAndwrite = function (url, callback) {
+        request.get(url).end(function (err, res) {
+            if (err) {
+                console.log(err);
+                console.log("有一张图片请求失败啦...");
+            } else {
+                var fileName = path.basename(url);
+                fs.writeFile("./img1/" + fileName, res.body, function (err) {
+                    if (err) {
+                        console.log(err);
+                        console.log("有一张图片写入失败啦...");
+                    } else {
+                        console.log(fileName);
+                        callback(null, "successful !");
+                        /*callback貌似必须调用，第二个参数将传给下一个回调函数的result，result是一个数组*/
+                    }
+                });
+            }
+        });
+    }
 
-
+    var downloadImg = function (asyncNum) {
+        console.log("即将异步并发下载图片，当前并发数为:" + asyncNum);
+        async.mapLimit(imgSrc, asyncNum, function (photo, callback) {
+            console.log("已有" + asyncNum + "张图片进入下载队列");
+            if (photo['src']) {
+                requestAndwrite(photo['src'], callback);
+            }else{
+                
+            }
+        }, function (err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                // console.log(result);<=会输出一个有2万多个“successful”字符串的数组
+                console.log("全部已下载完毕！");
+            }
+        });
+    };
+    downloadImg(1);
+}
+down(imgSrc);
 
 app.listen(3000, function (req, res) {
     console.log('app is running at port 3000');
