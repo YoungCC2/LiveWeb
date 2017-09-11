@@ -190,12 +190,13 @@ app.get('/downloadImg', function (req, res, next) {
         var Uurl = imgSrc;
         var requestAndwrite = function (url, callback) {
             var countUrl = 0;
-            
+    
             request.get(url).end(function (err, res) {
                 if (err) {
                     console.log(err);
                     console.log("有一张图片请求失败啦...");
                 } else {
+                    var fileName = path.basename(url);
                     fs.writeFile("./img1/" + fileName, res.body, function (err) {
                         if (err) {
                             console.log(err);
