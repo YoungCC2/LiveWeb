@@ -1,7 +1,6 @@
 var request = require('superagent');
 var est = require("request");
 var express = require('express');
-var utility = require('utility');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
 var mkdirp = require('mkdirp');
@@ -11,6 +10,7 @@ var fs = require('fs');
 var app = express();
 var conf = require('./conf.json');
 var imgSrc = require('./src.json');
+var mysql = require('mysql');
 var cookir;
 app.get('/', function (req, res, next) {
     var base_headers = {
@@ -127,7 +127,7 @@ app.get('/img', function (req, res, next) {
             'Accept-Language': 'zh-CN,zh;q=0.8',
             'Cache-Control': 'no-cache',
             Connection: 'keep-alive',
-            Cookie: 'q_c1=252899e930f84ddebdab2ee6cfb26913|1504792285000|1504792285000; r_cap_id="YzFkM2RhYmRlNmE3NGQ5YTk2YjgzNzQ0OWQ2ZDk3NTE=|1504792285|3ad220487341beb09eea44fbe443d7203ddb7ba7"; cap_id="MGJmMzkyYjlkM2YxNDE0N2IyZWIxYzJhMGUwYzc3OGE=|1504792285|b1be3833ddbc9291f2e53aef9913175de717128c"; d_c0="AIDCNbA6VwyPTqRedlx1g_TfZzxNq5xkM8o=|1504792286"; _zap=280af8f7-2c88-4e6f-8184-19c3773d75a1; z_c0=Mi4xYzhZTEFBQUFBQUFBZ01JMXNEcFhEQmNBQUFCaEFsVk43dHZZV1FCNUJKY09QNnFJZFc5dGxUQ3pEZ3ZiMFc2bXln|1504792302|413d48023cd2f03a178c8db6675fc0a76cdc5e64; aliyungf_tc=AQAAAOCocVgB9w4AdV34cZpUDYI7GlWb; _xsrf=5ecbfef3-7209-437a-8332-a6c6be797c37; __utma=51854390.397423546.1504792265.1504792265.1504924833.2; __utmb=51854390.0.10.1504924833; __utmc=51854390; __utmz=51854390.1504924833.2.2.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1',
+            Cookie: 'q_c1=f17d446552694d5fbbf0af2ab7619a0a|1504753247000|1504753247000; d_c0="AJBCKcWlVgyPTvVdkjkV8YLnZgvgvUcZpSE=|1504753248"; _zap=d719f1f5-26c3-4d96-94a0-b4c90e5c8859; r_cap_id="NjhlNWYzNDgwMWZiNDJlNGJkNGNkZDBhNTgwNjEzNmI=|1504753993|0e70a70a135f80b938a4f5c5b1302becefcaeefc"; cap_id="ZTBhOGI3NjZkYzIyNGY1YzgxYTVlNjhhOTFkMDkwY2M=|1504753993|79abac452198f777371b1c977310c7288d113c78"; z_c0=Mi4xYzhZTEFBQUFBQUFBa0VJcHhhVldEQmNBQUFCaEFsVk5UMGpZV1FDRWRKajUzZlhjRV9fZjlIcFNuSUtMa3NOcTFR|1504754511|065c87cce59c0589bcbffd22c14cef97450d09f1; __utma=51854390.1519459293.1504753249.1504850713.1504852601.9; __utmz=51854390.1504852601.9.8.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/collections; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1; aliyungf_tc=AQAAAGAU5E7QEw0An6RVfZD0T2fxpHYy; _xsrf=5c4e6162-1a6c-4104-83e9-9838adbbf26d',
             Host: 'www.zhihu.com',
             Pragma: 'no-cache',
             'Upgrade-Insecure-Requests': 1,
@@ -144,11 +144,13 @@ app.get('/img', function (req, res, next) {
                     var $ = cheerio.load(sres.text);
                     $(".Question-mainColumn .QuestionAnswer-content .RichContent-inner noscript img").each(function (indx, ele) {
                         var $ele = $(ele);
-                        items.push({
+                      /*  items.push({
                             src: $ele.attr('data-original')
-                        });
+                        });*/
+                        var z = '"'+$ele.attr('data-original') +'"';
+                        items.push(z);
                     })
-                    fs.writeFile('./src.json', JSON.stringify(items), function (err) {
+                    fs.writeFile('./src.json', items, function (err) {
                         if (err) {
                             throw err;
                         } else {
@@ -160,12 +162,62 @@ app.get('/img', function (req, res, next) {
                 }
             })
     }
+    
+            var downloadImg = function (asyncNum) {
+                console.log("即将异步并发爬取，当前并发数为:" + asyncNum);
+                async.mapLimit(topicUrls, asyncNum, function (photo, callback) {
+                    console.log("已有" + asyncNum + "个链家开始爬取");
+                    if (photo['title']) {
+                        requestFun(photo['title'], callback);
+                    } else {
+
+                    }
+                }, function (err, result) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        res.send('ok');
+                        console.log("全部已爬取完毕！");
+                    }
+                });
+            };
+    downloadImg(1);
+})
+
+app.get('/downloadImg', function (req, res, next) {
+    console.log(imgSrc);
+    function down(imgSrc) {
+        var Uurl = imgSrc;
+        var requestAndwrite = function (url, callback) {
+            var countUrl = 0;
+            
+            request.get(url).end(function (err, res) {
+                if (err) {
+                    console.log(err);
+                    console.log("有一张图片请求失败啦...");
+                } else {
+                    fs.writeFile("./img1/" + fileName, res.body, function (err) {
+                        if (err) {
+                            console.log(err);
+                            console.log("有一张图片写入失败啦...");
+                        } else {
+                            console.log(fileName);
+                            callback(null, "successful !");
+                            /*callback貌似必须调用，第二个参数将传给下一个回调函数的result，result是一个数组*/
+                        }
+                    });
+                }
+            });
+        }
+
         var downloadImg = function (asyncNum) {
             console.log("即将异步并发下载图片，当前并发数为:" + asyncNum);
-            async.mapLimit(topicUrls, asyncNum, function (photo, callback) {
+            async.mapLimit(imgSrc, asyncNum, function (photo, callback) {
                 console.log("已有" + asyncNum + "张图片进入下载队列");
-                if (photo['title']) {
-                    requestFun(photo['title'], callback);
+                if (photo) {
+                    requestAndwrite(photo, callback);
+                } else {
+
                 }
             }, function (err, result) {
                 if (err) {
@@ -177,54 +229,52 @@ app.get('/img', function (req, res, next) {
             });
         };
         downloadImg(10);
-    
-})
-
-function down(imgSrc) {
-    var Uurl = imgSrc;
-    var requestAndwrite = function (url, callback) {
-        request.get(url).end(function (err, res) {
-            if (err) {
-                console.log(err);
-                console.log("有一张图片请求失败啦...");
-            } else {
-                var fileName = path.basename(url);
-                fs.writeFile("./img1/" + fileName, res.body, function (err) {
-                    if (err) {
-                        console.log(err);
-                        console.log("有一张图片写入失败啦...");
-                    } else {
-                        console.log(fileName);
-                        callback(null, "successful !");
-                        /*callback貌似必须调用，第二个参数将传给下一个回调函数的result，result是一个数组*/
-                    }
-                });
-            }
-        });
     }
+    down(imgSrc);
+});
 
-    var downloadImg = function (asyncNum) {
-        console.log("即将异步并发下载图片，当前并发数为:" + asyncNum);
-        async.mapLimit(imgSrc, asyncNum, function (photo, callback) {
-            console.log("已有" + asyncNum + "张图片进入下载队列");
-            if (photo['src']) {
-                requestAndwrite(photo['src'], callback);
-            }else{
-                
-            }
-        }, function (err, result) {
-            if (err) {
-                console.log(err);
-            } else {
-                // console.log(result);<=会输出一个有2万多个“successful”字符串的数组
-                console.log("全部已下载完毕！");
-            }
-        });
-    };
-    downloadImg(1);
-}
-down(imgSrc);
-
+app.get('/mysql',function(req,res,next){
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        port:'3306',
+        user: 'root',
+        password: '123456',
+        database:'world'
+    });
+    //开始连接
+    connection.connect(function (err) {
+        if (err) {
+            console.log('[query] - :' + err);
+            return;
+        }
+//        console.log('[connection connect]  succeed!');
+    });
+    //执行查询
+    /*connection.query('SELECT src FROM img', function (error, results, fields) {
+        if (error) throw error;
+        res.send(results)
+    });*/
+    var wan = {
+        success:{
+            msg:'success',
+            reCode:'200'
+        },
+        error:{
+            msg:'操作失败！',
+            reCode:'404'
+            
+        }
+    }
+    connection.query("insert into img(src) values('https://pic2.zhimg.com/133aca0e7a971c3c4d0bb02be1a056ed_r.jpg')", function (error, results, fields) {
+        if (error){
+            res.send(wan.error);
+        }else{
+            res.send(wan.success)
+        }
+    });
+    
+    connection.end();
+})
 app.listen(3000, function (req, res) {
     console.log('app is running at port 3000');
 });

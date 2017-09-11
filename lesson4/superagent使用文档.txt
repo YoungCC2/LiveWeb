@@ -1,0 +1,21 @@
+superagent是一个客户端请求代理模块
+可以处理的请求
+    get,post,put,delete,head
+
+举例 post 请求
+request
+    .post('http://www.xxx.com/sd')     //请求的链接
+    .send({name:'yhyh',se:'male'})     //post的数据
+    .set({'accept','application/json'}) //设置请求头
+    .end(function(res){                //请求之后的回调
+        
+    })
+get请求
+request
+    .get()
+    .query()  //query()方法可以使用字符串 -> .query('search=Manny&range=1..5')  可以传递对象  .query({ query: 'Manny', range: '1..5', order: 'desc' })
+请求数据格式化
+ 使用.type()方法  有 json和 from两个参数   //form是form-data和urlencoded的别名,为了向后兼容
+    .type也可以设置Content-Type  .type('application/json')     .type('png')
+    
+    
