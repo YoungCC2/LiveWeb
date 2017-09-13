@@ -1,6 +1,7 @@
 var request = require('superagent');
 var est = require("request");
 var express = require('express');
+
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
 var mkdirp = require('mkdirp');
@@ -11,7 +12,11 @@ var app = express();
 var conf = require('./conf.json');
 var imgSrc = require('./src.json');
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
 var cookir;
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
+
 app.get('/', function (req, res, next) {
     var base_headers = {
         Accept: '*/*',
@@ -58,62 +63,80 @@ app.get('/', function (req, res, next) {
 app.get('/home', function (req, res, next) {
     var base_header = {
         Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, br',
+        'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.8',
-        'Cache-Control': 'no-cache',
         'Connection': 'keep-alive',
-        Cookie: 'q_c1=252899e930f84ddebdab2ee6cfb26913|1504792285000|1504792285000; r_cap_id="YzFkM2RhYmRlNmE3NGQ5YTk2YjgzNzQ0OWQ2ZDk3NTE=|1504792285|3ad220487341beb09eea44fbe443d7203ddb7ba7"; cap_id="MGJmMzkyYjlkM2YxNDE0N2IyZWIxYzJhMGUwYzc3OGE=|1504792285|b1be3833ddbc9291f2e53aef9913175de717128c"; d_c0="AIDCNbA6VwyPTqRedlx1g_TfZzxNq5xkM8o=|1504792286"; _zap=280af8f7-2c88-4e6f-8184-19c3773d75a1; z_c0=Mi4xYzhZTEFBQUFBQUFBZ01JMXNEcFhEQmNBQUFCaEFsVk43dHZZV1FCNUJKY09QNnFJZFc5dGxUQ3pEZ3ZiMFc2bXln|1504792302|413d48023cd2f03a178c8db6675fc0a76cdc5e64; aliyungf_tc=AQAAAOCocVgB9w4AdV34cZpUDYI7GlWb; _xsrf=5ecbfef3-7209-437a-8332-a6c6be797c37; __utma=51854390.397423546.1504792265.1504792265.1504924833.2; __utmb=51854390.0.10.1504924833; __utmc=51854390; __utmz=51854390.1504924833.2.2.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1',
-        Host: 'www.zhihu.com',
-        Referer: 'https://www.zhihu.com/',
+        'Cache-Control':'max-age=0',
+        Cookie: 'SINAGLOBAL=3025813996998.969.1503034766074; wb_cmtLike_1662736405=1; wvr=6; UOR=,,www.happyge.com; _s_tentry=-; Apache=6073872113276.218.1505184991234; ULV=1505184991240:11:11:3:6073872113276.218.1505184991234:1505178181136; YF-Ugrow-G0=169004153682ef91866609488943c77f; SSOLoginState=1505184993; SCF=Ap9KrOm1nN4UNPRFCDcI0uu4l8uHK5gkmMcqozyNrehNzrGNCqg2NS7E4AsC3nl_5QiIPy1Ru8GffB5E2-ZWhl0.; SUB=_2A250szyxDeRhGedI7VAW8yjIyzmIHXVXySl5rDV8PUNbmtBeLWr4kW8-GpZVN9fNYp6w5VX1jHJR9uEzkA..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5WyNw0a83_.-6ZDQivLDSl5JpX5KMhUgL.Fo2cSozNe0qXeh-2dJLoIpf2dNHbds-LxKBLBonLBo99dNHV9EH81F-R1FHWBBtt; SUHB=079i9cufE_ebjK; ALF=1536720992; YF-V5-G0=5f9bd778c31f9e6f413e97a1d464047a; YF-Page-G0=e3ff5d70990110a1418af5c145dfe402; wb_cusLike_1662736405=N',
+        Host: 'weibo.com',
         'Upgrade-Insecure-Requests': 1,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
     }
-    var items = [];
-
-    function req(i) {
-        var url = 'https://www.zhihu.com/collection/68728362?page=' + i;
-        request
-            .get(url)
-            .set(base_header)
-            .end(function (err, sres) {
-                if (err) {
-                    return next(err);
-                }
-                var $ = cheerio.load(sres.text);
-
-                $('#zh-list-collection-wrap .zm-item').each(function (idx, element) {
-                    var $toggle = $(element).find('.toggle-expand');
-                    var imgUrl = $toggle.attr('href'); 
-                    if (imgUrl) {
-                        if (imgUrl.indexOf('https') === -1) {
-                            imgUrl = 'https://www.zhihu.com' + imgUrl;
-                            items.push({
-                                title: imgUrl
-                            });
-                        } else {
-                            items.push({
-                                title: imgUrl
-                            });
-                        }
-                    }
-                });
-                fs.writeFile('./test2.json', JSON.stringify(items), function (err) {
-                    if (err) {
-                        throw err;
-                    } else {
-                        console.log(i);
-                    }
-                });
-                if (i == 6) {
-                    res.send('ok');
-                } else {
-                    i++;
-                    req(i);
-                }
-            });
+    var getParam = {
+        ajwvr:'6',
+        domain:'100505',
+        is_search:'0',
+        visible:'0',
+        is_all:1,
+        is_tag:0,
+        profile_ftype:'1',
+        page:'1',
+        pagebar:'1',
+        pl_name:'Pl_Official_MyProfileFeed__22',
+        id:'1005051916825084',
+        script_uri:'/p/1005051916825084/home',
+        feed_type:'0',
+        pre_page:'1',
+        domain_op:'100505',
+        __rnd:'1505200425930'
     }
-    req(1);
-
+    var items = [];
+    request
+        .get("http://weibo.com/p/1005051916825084/home")
+        .set(base_header)
+        .query(getParam)
+        .end(function(err,sres){
+            if(err){
+                res.send('e');
+                return next(err);   
+            }else{
+                var $ = cheerio.load(sres.text);
+                var mc = [];
+                $('script').each(function(k,v){
+                    if (k > 3) {
+                        var temp = $('script').eq(k).text();  
+                        if(temp.substr(-1)===';'){
+                            temp = temp.substring(8, temp.length - 2);
+                        }else{
+                            temp = temp.substring(8, temp.length - 1);
+                        }
+                        temp = JSON.parse(temp);
+                        mc.push({
+                            'html':temp.html,
+                            'domid':temp.domid
+                        });
+                    }
+                });
+                var mainStr = "";
+                mc.forEach(function(k,v){
+                    if(mc[v]["domid"]==="Pl_Official_MyProfileFeed__22"){
+                        mainStr = mc[v]["html"]
+                    }
+                });
+                $ = cheerio.load(mainStr);
+                $(".WB_feed_v4 .WB_feed_like").each(function(ids,ele){
+                    var st = $(ele).find('.media_box');
+                    if (st) {
+                        st.find("img").each(function(idsa,eele){
+                            items.push({
+                                src:$(eele).attr('src')
+                            });
+                        });
+                    }
+                });
+                res.send(items);
+            }
+    })
 });
 
 app.get('/img', function (req, res, next) {
@@ -234,47 +257,44 @@ app.get('/downloadImg', function (req, res, next) {
     down(imgSrc);
 });
 
-app.get('/mysql',function(req,res,next){
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        port:'3306',
-        user: 'root',
-        password: '123456',
-        database:'world'
-    });
-    //开始连接
-    connection.connect(function (err) {
-        if (err) {
-            console.log('[query] - :' + err);
-            return;
+app.post('/mysql',function(req,res,next){
+     res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:54459');
+        var connection = mysql.createConnection({
+            host: 'localhost',
+            port: '3306',
+            user: 'root',
+            password: '123456',
+            database: 'world'
+        });
+        //开始连接
+        connection.connect(function (err) {
+            if (err) {
+                console.log('[query] - :' + err);
+                return;
+            }
+        });
+        var wan = {
+            success: {
+                msg: 'success',
+                reCode: '200'
+            },
+            error: {
+                msg: '操作失败！',
+                reCode: '404'
+
+            }
         }
-//        console.log('[connection connect]  succeed!');
-    });
-    //执行查询
-    /*connection.query('SELECT src FROM img', function (error, results, fields) {
-        if (error) throw error;
-        res.send(results)
-    });*/
-    var wan = {
-        success:{
-            msg:'success',
-            reCode:'200'
-        },
-        error:{
-            msg:'操作失败！',
-            reCode:'404'
-            
-        }
-    }
-    connection.query("insert into img(src) values('https://pic2.zhimg.com/133aca0e7a971c3c4d0bb02be1a056ed_r.jpg')", function (error, results, fields) {
-        if (error){
-            res.send(wan.error);
-        }else{
-            res.send(wan.success)
-        }
-    });
-    
-    connection.end();
+        //执行查询
+        var src = req.body.src;
+        var squery = "insert into img(src) values('"+src+"')"
+        connection.query(squery, function (error, results, fields) {
+            if (error) {
+                res.send(wan.error);
+            } else {
+                res.send(wan.success)
+            }
+        });
+        connection.end();
 })
 app.listen(3000, function (req, res) {
     console.log('app is running at port 3000');

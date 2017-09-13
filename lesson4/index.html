@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script src="jquery-3.2.1.min.js"></script>
+    <script type="application/javascript">
+        $.ajax({
+            url:'http://localhost:3000/mysql',
+            type:'POST',
+            data:{
+                "src":'http://www.baidu.com'
+            },
+            success:function(res){
+                console.log(res);
+            },
+            error:function(err){
+                console.log(err);
+            }
+        })
+    </script>
+</body>
+</html>

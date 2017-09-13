@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "async": "^2.5.0",
+    "body-parser": "^1.18.0",
     "cheerio": "^0.17.0",
     "eventproxy": "^1.0.0",
     "express": "^4.9.5",
