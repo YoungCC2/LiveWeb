@@ -13,8 +13,12 @@ var conf = require('./conf.json');
 var imgSrc = require('./src.json');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
+var open = require("open");
+// open("http://www.baidu.com", "firefox");
 var cookir;
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json());
 
 app.get('/', function(req, res, next) {
@@ -393,6 +397,25 @@ app.post('/mysql', function(req, res, next) {
     });
     connection.end();
 })
+
+app.get('/asyncs', function(req, res, next) {
+    var taskJson = {
+        a: function(cb) {
+            cb(null, 'str_a');
+        },
+        b: function(cb) {
+            cb(null, 'str_b');
+        },
+        c: function(cb) {
+            cb(null, 'str_c');
+        }
+    }
+    async.series(taskJson, function(err, result) {
+        console.log(result);
+        res.end();
+    });
+});
+
 app.listen(3000, function(req, res) {
     console.log('app is running at port 3000');
 });
