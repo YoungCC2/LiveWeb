@@ -5,8 +5,8 @@ var express = require('express');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
 var mkdirp = require('mkdirp');
-var async  = require('async');
-var path  = require('path');
+var async = require('async');
+var path = require('path');
 var fs = require('fs');
 var app = express();
 var conf = require('./conf.json');
@@ -14,10 +14,10 @@ var imgSrc = require('./src.json');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var cookir;
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/', function (req, res, next) {
+app.get('/', function(req, res, next) {
     var base_headers = {
         Accept: '*/*',
         'Accept-Encoding': "gzip, deflate, br",
@@ -60,90 +60,186 @@ app.get('/', function (req, res, next) {
         });
 });
 
-app.get('/home', function (req, res, next) {
+app.get('/home', function(req, res, next) {
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        port: '3306',
+        user: 'root',
+        password: '123456',
+        database: 'world'
+    });
     var base_header = {
         Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
         'Accept-Encoding': 'gzip, deflate',
         'Accept-Language': 'zh-CN,zh;q=0.8',
         'Connection': 'keep-alive',
-        'Cache-Control':'max-age=0',
-        Cookie: 'SINAGLOBAL=3025813996998.969.1503034766074; wb_cmtLike_1662736405=1; wvr=6; UOR=,,www.happyge.com; _s_tentry=-; Apache=6073872113276.218.1505184991234; ULV=1505184991240:11:11:3:6073872113276.218.1505184991234:1505178181136; YF-Ugrow-G0=169004153682ef91866609488943c77f; SSOLoginState=1505184993; SCF=Ap9KrOm1nN4UNPRFCDcI0uu4l8uHK5gkmMcqozyNrehNzrGNCqg2NS7E4AsC3nl_5QiIPy1Ru8GffB5E2-ZWhl0.; SUB=_2A250szyxDeRhGedI7VAW8yjIyzmIHXVXySl5rDV8PUNbmtBeLWr4kW8-GpZVN9fNYp6w5VX1jHJR9uEzkA..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5WyNw0a83_.-6ZDQivLDSl5JpX5KMhUgL.Fo2cSozNe0qXeh-2dJLoIpf2dNHbds-LxKBLBonLBo99dNHV9EH81F-R1FHWBBtt; SUHB=079i9cufE_ebjK; ALF=1536720992; YF-V5-G0=5f9bd778c31f9e6f413e97a1d464047a; YF-Page-G0=e3ff5d70990110a1418af5c145dfe402; wb_cusLike_1662736405=N',
+        'Cache-Control': 'max-age=0',
+        Cookie: 'SINAGLOBAL=3025813996998.969.1503034766074; wb_cmtLike_1662736405=1; wvr=6; UOR=,,www.happyge.com; YF-Ugrow-G0=1eba44dbebf62c27ae66e16d40e02964; SSOLoginState=1505269772; YF-V5-G0=d45b2deaf680307fa1ec077ca90627d1; _s_tentry=-; Apache=610506355751.2435.1505269776456; ULV=1505269776633:13:13:5:610506355751.2435.1505269776456:1505264517861; YF-Page-G0=c47452adc667e76a7435512bb2f774f3; SCF=Ap9KrOm1nN4UNPRFCDcI0uu4l8uHK5gkmMcqozyNrehN0PMMOElI-yXXz07wkAUSPuEjtzPscJeJMDdzLsNFo2g.; SUB=_2A250vM12DeRhGedI7VAW8yjIyzmIHXVXy7m-rDV8PUJbmtBeLVjAkW8B1_X8l5RyIIxC3lg1e6nyMC2GCQ..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5WyNw0a83_.-6ZDQivLDSl5JpX5o2p5NHD95QpSoqES0ecSh5fWs4DqcjUxsvfqJpLi--Xi-zRi-zcggvfdJMLxKnL1hnLB-2t; SUHB=06ZEuseM4UYGBU; ALF=1536805772; wb_cusLike_1662736405=N',
         Host: 'weibo.com',
         'Upgrade-Insecure-Requests': 1,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
     }
     var getParam = {
-        ajwvr:'6',
-        domain:'100505',
-        is_search:'0',
-        visible:'0',
-        is_all:1,
-        is_tag:0,
-        profile_ftype:'1',
-        page:'1',
-        pagebar:'1',
-        pl_name:'Pl_Official_MyProfileFeed__22',
-        id:'1005051916825084',
-        script_uri:'/p/1005051916825084/home',
-        feed_type:'0',
-        pre_page:'1',
-        domain_op:'100505',
-        __rnd:'1505200425930'
+        ajwvr: '6',
+        domain: '100505',
+        is_search: '0',
+        visible: '0',
+        is_all: 1,
+        is_tag: 0,
+        profile_ftype: '1',
+        page: '1',
+        pagebar: '0',
+        pl_name: 'Pl_Official_MyProfileFeed__22',
+        id: '1005051916825084',
+        script_uri: '/p/1005051916825084/home',
+        feed_type: '0',
+        pre_page: '1',
+        domain_op: '100505',
+        __rnd: '1505200425930'
     }
-    var items = [];
-    request
-        .get("http://weibo.com/p/1005051916825084/home")
-        .set(base_header)
-        .query(getParam)
-        .end(function(err,sres){
-            if(err){
-                res.send('e');
-                return next(err);   
-            }else{
-                var $ = cheerio.load(sres.text);
-                var mc = [];
-                $('script').each(function(k,v){
-                    if (k > 3) {
-                        var temp = $('script').eq(k).text();  
-                        if(temp.substr(-1)===';'){
-                            temp = temp.substring(8, temp.length - 2);
-                        }else{
-                            temp = temp.substring(8, temp.length - 1);
-                        }
-                        temp = JSON.parse(temp);
-                        mc.push({
-                            'html':temp.html,
-                            'domid':temp.domid
-                        });
-                    }
-                });
-                var mainStr = "";
-                mc.forEach(function(k,v){
-                    if(mc[v]["domid"]==="Pl_Official_MyProfileFeed__22"){
-                        mainStr = mc[v]["html"]
-                    }
-                });
-                $ = cheerio.load(mainStr);
-                $(".WB_feed_v4 .WB_feed_like").each(function(ids,ele){
-                    var st = $(ele).find('.media_box');
-                    if (st) {
-                        st.find("img").each(function(idsa,eele){
-                            items.push({
-                                src:$(eele).attr('src')
+
+    function setParam(page, pagebar) {
+        return {
+            ajwvr: '6',
+            domain: '100505',
+            is_search: '0',
+            visible: '0',
+            is_all: 1,
+            is_tag: 0,
+            profile_ftype: '1',
+            page: page,
+            pagebar: pagebar,
+            pl_name: 'Pl_Official_MyProfileFeed__22',
+            id: '1005051916825084',
+            script_uri: '/vczh',
+            feed_type: '0',
+            pre_page: page,
+            domain_op: '100505',
+            __rnd: '1505200425930'
+        }
+    }
+
+    function defaultParam(page) {
+        return {
+            is_search: '0',
+            visible: '0',
+            is_all: '1',
+            is_tag: '0',
+            profile_ftype: '1',
+            page: page
+        }
+    }
+
+    var sccc = '';
+    var count = -1;
+
+    function requestGet(page, pagebar, callback) {
+        if (pagebar == -1) {
+            var queryObj = defaultParam(page);
+        } else {
+            var queryObj = setParam(page, pagebar);
+        }
+        request
+            .get("http://weibo.com/p/1005051916825084/home")
+            .set(base_header)
+            .query(queryObj)
+            .end(function(err, sres) {
+                if (err) {
+                    res.send('e');
+                    return next(err);
+                } else {
+                    var $ = cheerio.load(sres.text);
+                    var mc = [];
+                    var items = [];
+                    $('script').each(function(k, v) {
+                        if (k > 3) {
+                            var temp = $('script').eq(k).text();
+                            if (temp.substr(-1) === ';') {
+                                temp = temp.substring(8, temp.length - 2);
+                            } else {
+                                temp = temp.substring(8, temp.length - 1);
+                            }
+                            temp = JSON.parse(temp);
+                            mc.push({
+                                'html': temp.html,
+                                'domid': temp.domid
                             });
+                        }
+                    });
+                    var mainStr = "";
+                    mc.forEach(function(k, v) {
+                        if (mc[v]["domid"] === "Pl_Official_MyProfileFeed__22") {
+                            mainStr = mc[v]["html"];
+                        }
+                    });
+                    $ = cheerio.load(mainStr);
+                    connection.connect(function(err) {
+                        if (!err) {
+                            console.log('sc');
+                        }
+                    });
+                    $(".WB_feed_v4 .WB_feed_like").each(function(ids, ele) {
+                        var st = $(ele).find('.media_box');
+                        if (st) {
+                            st.find("img").each(function(idsa, eele) {
+                                items.push({
+                                    src: $(eele).attr('src')
+                                });
+                            });
+                        }
+                    });
+                    items.forEach(function(item, k) {
+                        var squery = "insert into img(src,page) values('" + item['src'] + "'," + page + ")"
+                        connection.query(squery, function(error, results) {
+                            if (error) {
+                                res.send(error);
+                            } else {
+                                //                                console.log(k);
+                            }
                         });
-                    }
-                });
-                res.send(items);
-            }
-    })
+                    });
+                    callback(err, res);
+                }
+            })
+    };
+
+    function pageDate(page) {
+        if (page) {
+            var pages = page;
+            var tasks = ['-1', '0', '1'];
+            async.eachSeries(tasks, function(item, callback) {
+                requestGet(pages, item, callback);
+            }, function(err, result) {
+                console.log(page + "end");
+            });
+        }
+    }
+    var pageArr = [];
+    for (var i = 200; i <= 204; i++) {
+        pageArr[i] = i;
+    }
+    async.mapLimit(pageArr, 2, function(item, callback) {
+        if (item) {
+            setTimeout(function() {
+                pageDate(item);
+                callback(null, item + '!!!');
+            }, 2000)
+        } else {
+            callback(null, item + '!!!');
+        }
+    }, function(err, result) {
+        console.log("ennnnnnnnnnnnnnnd!");
+    });
+
+
 });
 
-app.get('/img', function (req, res, next) {
-    
+app.get('/img', function(req, res, next) {
+
     var topicUrls = conf;
     var items = [];
-    function requestFun(url,callback) {
+
+    function requestFun(url, callback) {
         var baseheader = {
             Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
             'Accept-Encoding': 'gzip, deflate, br',
@@ -159,21 +255,21 @@ app.get('/img', function (req, res, next) {
         request
             .get(url)
             .set(baseheader)
-            .end(function (err, sres) {
+            .end(function(err, sres) {
                 if (err) {
-                    console.log('err',i);
+                    console.log('err', i);
                     return next(err);
                 } else {
                     var $ = cheerio.load(sres.text);
-                    $(".Question-mainColumn .QuestionAnswer-content .RichContent-inner noscript img").each(function (indx, ele) {
+                    $(".Question-mainColumn .QuestionAnswer-content .RichContent-inner noscript img").each(function(indx, ele) {
                         var $ele = $(ele);
-                      /*  items.push({
-                            src: $ele.attr('data-original')
-                        });*/
-                        var z = '"'+$ele.attr('data-original') +'"';
+                        /*  items.push({
+                              src: $ele.attr('data-original')
+                          });*/
+                        var z = '"' + $ele.attr('data-original') + '"';
                         items.push(z);
                     })
-                    fs.writeFile('./src.json', items, function (err) {
+                    fs.writeFile('./src.json', items, function(err) {
                         if (err) {
                             throw err;
                         } else {
@@ -181,46 +277,47 @@ app.get('/img', function (req, res, next) {
                             callback(null, "successful !");
                         }
                     });
-                    
+
                 }
             })
     }
-    
-            var downloadImg = function (asyncNum) {
-                console.log("即将异步并发爬取，当前并发数为:" + asyncNum);
-                async.mapLimit(topicUrls, asyncNum, function (photo, callback) {
-                    console.log("已有" + asyncNum + "个链家开始爬取");
-                    if (photo['title']) {
-                        requestFun(photo['title'], callback);
-                    } else {
 
-                    }
-                }, function (err, result) {
-                    if (err) {
-                        console.log(err);
-                    } else {
-                        res.send('ok');
-                        console.log("全部已爬取完毕！");
-                    }
-                });
-            };
+    var downloadImg = function(asyncNum) {
+        console.log("即将异步并发爬取，当前并发数为:" + asyncNum);
+        async.mapLimit(topicUrls, asyncNum, function(photo, callback) {
+            console.log("已有" + asyncNum + "个链家开始爬取");
+            if (photo['title']) {
+                requestFun(photo['title'], callback);
+            } else {
+
+            }
+        }, function(err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send('ok');
+                console.log("全部已爬取完毕！");
+            }
+        });
+    };
     downloadImg(1);
 })
 
-app.get('/downloadImg', function (req, res, next) {
+app.get('/downloadImg', function(req, res, next) {
     console.log(imgSrc);
+
     function down(imgSrc) {
         var Uurl = imgSrc;
-        var requestAndwrite = function (url, callback) {
+        var requestAndwrite = function(url, callback) {
             var countUrl = 0;
-    
-            request.get(url).end(function (err, res) {
+
+            request.get(url).end(function(err, res) {
                 if (err) {
                     console.log(err);
                     console.log("有一张图片请求失败啦...");
                 } else {
                     var fileName = path.basename(url);
-                    fs.writeFile("./img1/" + fileName, res.body, function (err) {
+                    fs.writeFile("./img1/" + fileName, res.body, function(err) {
                         if (err) {
                             console.log(err);
                             console.log("有一张图片写入失败啦...");
@@ -234,16 +331,16 @@ app.get('/downloadImg', function (req, res, next) {
             });
         }
 
-        var downloadImg = function (asyncNum) {
+        var downloadImg = function(asyncNum) {
             console.log("即将异步并发下载图片，当前并发数为:" + asyncNum);
-            async.mapLimit(imgSrc, asyncNum, function (photo, callback) {
+            async.mapLimit(imgSrc, asyncNum, function(photo, callback) {
                 console.log("已有" + asyncNum + "张图片进入下载队列");
                 if (photo) {
                     requestAndwrite(photo, callback);
                 } else {
 
                 }
-            }, function (err, result) {
+            }, function(err, result) {
                 if (err) {
                     console.log(err);
                 } else {
@@ -257,23 +354,23 @@ app.get('/downloadImg', function (req, res, next) {
     down(imgSrc);
 });
 
-app.post('/mysql',function(req,res,next){
-     res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:54459');
-        var connection = mysql.createConnection({
-            host: 'localhost',
-            port: '3306',
-            user: 'root',
-            password: '123456',
-            database: 'world'
-        });
-        //开始连接
-        connection.connect(function (err) {
-            if (err) {
-                console.log('[query] - :' + err);
-                return;
-            }
-        });
-        var wan = {
+app.post('/mysql', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:54459');
+    var connection = mysql.createConnection({
+        host: 'localhost',
+        port: '3306',
+        user: 'root',
+        password: '123456',
+        database: 'world'
+    });
+    //开始连接
+    connection.connect(function(err) {
+        if (err) {
+            console.log('[query] - :' + err);
+            return;
+        }
+    });
+    var wan = {
             success: {
                 msg: 'success',
                 reCode: '200'
@@ -285,17 +382,17 @@ app.post('/mysql',function(req,res,next){
             }
         }
         //执行查询
-        var src = req.body.src;
-        var squery = "insert into img(src) values('"+src+"')"
-        connection.query(squery, function (error, results, fields) {
-            if (error) {
-                res.send(wan.error);
-            } else {
-                res.send(wan.success)
-            }
-        });
-        connection.end();
+    var src = req.body.src;
+    var squery = "insert into img(src) values('" + src + "')";
+    connection.query(squery, function(error, results, fields) {
+        if (error) {
+            res.send(wan.error);
+        } else {
+            res.send(wan.success)
+        }
+    });
+    connection.end();
 })
-app.listen(3000, function (req, res) {
+app.listen(3000, function(req, res) {
     console.log('app is running at port 3000');
 });
