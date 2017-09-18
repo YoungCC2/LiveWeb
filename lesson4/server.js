@@ -357,8 +357,8 @@ app.get('/downloadImg', function(req, res, next) {
     down(imgSrc);
 });
 
-app.post('/mysql', function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:54459');
+app.get('/mysql', function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
     var connection = mysql.createConnection({
         host: 'localhost',
         port: '3306',
@@ -373,25 +373,34 @@ app.post('/mysql', function(req, res, next) {
             return;
         }
     });
-    var wan = {
-            success: {
-                msg: 'success',
-                reCode: '200'
-            },
-            error: {
-                msg: '操作失败！',
-                reCode: '404'
 
-            }
+    function resStr(err, resData) {
+        var resCode = 0,
+            msg = "",
+            data = 0;
+        if (err !== "error") {
+            resCode = 200;
+            msg = "请求成功";
+            data = resData
+        } else {
+            resCode = 404;
+            msg = "请求失败";
+            data = null
         }
-        //执行查询
+        return {
+            "resCode": resCode,
+            "resStr": msg,
+            "data": data
+        }
+    }
+    //执行查询
     var src = req.body.src;
-    var squery = "insert into img(src) values('" + src + "')";
+    var squery = "SELECT Code,Name,SurfaceArea,IndepYear,Population FROM country";
     connection.query(squery, function(error, results, fields) {
         if (error) {
-            res.send(wan.error);
+            res.send(resStr('error'));
         } else {
-            res.send(wan.success)
+            res.send(resStr(null, results))
         }
     });
     connection.end();
