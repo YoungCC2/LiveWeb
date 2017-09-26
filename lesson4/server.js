@@ -9,10 +9,13 @@ var path = require('path');
 var fs = require('fs');
 var app = express();
 var conf = require('./conf.json');
-var imgSrc = require('./src.json');
+// var imgSrc = require('./src.json');
+var mainMenu = require('./mainMenu.json');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var open = require("open");
+var nodemailer = require('nodemailer');
+
 // open("http://www.baidu.com", "firefox");
 var cookir;
 app.use(bodyParser.urlencoded({
@@ -400,7 +403,8 @@ app.get('/mysql', function(req, res, next) {
         if (error) {
             res.send(resStr('error'));
         } else {
-            res.send(resStr(null, results))
+//            res.send(resStr(null, results))
+            res.send(results)
         }
     });
     connection.end();
@@ -424,6 +428,63 @@ app.get('/asyncs', function(req, res, next) {
     });
 });
 
+app.get('/email',function(req,res,next){
+    var smtpConfig = {
+        host: 'smtp.163.com',
+        port: 465,
+        auth: {
+            user: 'yh4063254@163.com',
+            pass: 'APTX4869'
+        }
+    };
+    var transporter =  nodemailer.createTransport(smtpConfig);
+    var sendmail = function (html) {
+        var option = {
+            from: "yh4063254@163.com",
+            to: "743472220@qq.com",
+            subject: '来自node的邮件',
+            html: html,
+            attachments:[
+                {
+                    filename :'photo.gif',
+                    path:'http://www.h3bpm.com/uploadfile/1488956248.gif'
+                },{
+                    filename:'content',
+                    content :'发送内容'
+                }
+            ]
+        }
+        transporter.sendMail(option, function (error, response) {
+            if (error) {
+                console.log("fail: " + error);
+                res.send(error);
+            } else {
+                console.log("success: " + response.messageID);
+                res.send('ok');
+            }
+        });
+    }
+
+    sendmail("邮件内容：<br/>这是来自nodemailer发送的邮件");
+})
+
+app.get('/elma',function(req,res,next){
+    var sc = mainMenu;
+    var arr = [];
+    sc.forEach(function(i,k){
+        if(i['sub_categories']){
+           Object.keys(i['sub_categories']).map(function(v){
+               if(v!=0){
+                   arr.push({
+                       'name':i['sub_categories'][v]['name'],
+                       'id':i['sub_categories'][v]['id']
+                   });
+               }
+           });
+        }
+    });
+    res.send(arr);
+});
 app.listen(3000, function(req, res) {
     console.log('app is running at port 3000');
 });
