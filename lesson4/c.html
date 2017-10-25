@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.js 
+
+"></script>
+</head>
+
+<body>
+    <button class="one">123</button>
+    <script>
+        $('.one').click(function() {
+            var data = {
+                    Login: 'admin',
+                    Pwd: '111'
+                }
+            $.ajax({
+                type: 'POST',
+                url: 'http://server/api/account/signin',
+                data: JSON.stringify(data),
+                dataType: 'json',
+                success: function(result) {
+                    console.log(result);
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    console.log(XMLHttpRequest.status);
+                    console.log(XMLHttpRequest.readyState);
+                    console.log(textStatus);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

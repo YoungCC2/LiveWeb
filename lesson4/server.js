@@ -16,6 +16,7 @@ var bodyParser = require('body-parser');
 var open = require("open");
 var nodemailer = require('nodemailer');
 
+
 // open("http://www.baidu.com", "firefox");
 var cookir;
 app.use(bodyParser.urlencoded({
@@ -103,7 +104,7 @@ app.get('/home', function(req, res, next) {
         domain_op: '100505',
         __rnd: '1505200425930'
     }
-
+    mongod.exe --logpath D:\MongoDB\Server\3.4\logs\mongodb.log --logappend --dbpath D:\MongoDB\Server\3.4\data --directoryperdb --serviceName MongoDB -install  
     function setParam(page, pagebar) {
         return {
             ajwvr: '6',
@@ -469,22 +470,55 @@ app.get('/email',function(req,res,next){
 })
 
 app.get('/elma',function(req,res,next){
-    var sc = mainMenu;
-    var arr = [];
-    sc.forEach(function(i,k){
-        if(i['sub_categories']){
-           Object.keys(i['sub_categories']).map(function(v){
-               if(v!=0){
-                   arr.push({
-                       'name':i['sub_categories'][v]['name'],
-                       'id':i['sub_categories'][v]['id']
-                   });
-               }
-           });
+    console.log(req);
+    res.header('Access-Control-Allow-Origin', '*');
+    var url = 'https://www.ele.me/restapi/shopping/restaurants';
+    var baseHead = {
+        "accept":'application/json, text/plain, */*',
+        "accept-encoding":"gzip, deflate, br",
+        "referer":'https://www.ele.me/place/wm5zbt1gyfv?latitude=29.51543&longitude=106.54811',
+        "user-agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.91 Safari/537.36",
+        "x-shard":"loc=106.54811,29.51543"
+    }
+    function setQuery(offset,ids){
+        return {
+            "extras[]":"activities",
+            "geohash":"wm5zbt1gyfv",
+            "latitude":"29.51543",
+            "limit":"24",
+            "longitude":"106.54811",
+            "offset":offset,
+            "terminal":"web",
+            "restaurant_category_ids[]":ids
         }
-    });
-    res.send(arr);
+    }
+
+    request
+        .get(url)
+        .query(setQuery(req.query.offset,req.query.ids))
+        .set(baseHead)
+        .end(function(err,sres){
+            var s = JSON.parse(sres['text']);
+            var outson = [];
+            s.some(function(item,k){
+                outson.push({
+                    'name':item['name'],
+                    "piecewise_agent_fee":item['piecewise_agent_fee']['description'],
+                    "distance":item['distance'],
+                    "phone":item["phone"],
+                    "status":item['status'] == 1?"开张":"打烊",
+                    "recent_order_num":item['recent_order_num'],
+                    "address":item["address"],
+                    "url":"https://www.ele.me/shop/"+item['id']
+                })
+            });
+            res.send(outson);
+        })
 });
+
+app.get('/cs',function(req,res,next){
+    res.send('ok');
+})
 app.listen(3000, function(req, res) {
     console.log('app is running at port 3000');
 });
