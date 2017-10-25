@@ -3,8 +3,8 @@ var uuid = require('node-uuid');
 var md5 = require('md5');
 var request = require('request');
 
-var HOST = 'danmu.douyutv.com';
-var PORT = 8602;
+var HOST = '220.167.12.147';
+var PORT = 12602;
 
 var  roomid = "606118";
 var user = ""
@@ -77,16 +77,16 @@ setInterval(function() {
 
 socket.on('data', function(data) {
     if (data.indexOf('type@=loginres') >= 0) {
-            //登录成功
+            //登录成功 
         //        getGroupId(roomid, function (gid) {
         //            console.log('gid of room[' + roomid + '] is ' + gid)
         //            send(socket, 'type@=joingroup/rid@=' + 65962 + '/gid@=' + 2 + '/');
         //        });
-        send(socket, 'type@=joingroup/rid@=' + 208114 + '/gid@=' + -9999 + '/');
+        send(socket, 'type@=joingroup/rid@=' + 507882 + '/gid@=' + -9999 + '/');
     } else if (data.indexOf('type@=chatmsg') >= 0) {
         var msg = data.toString();
         var snick = msg.match(/nn@=(.*?)\//g)[0].replace('snick@=', '');
-        var content = msg.match(/txt@=(.*?)\//g)[0].replace('content@=', '');
+        var content = msg.match(/txt@=(.*?)\//g) ? msg.match(/txt@=(.*?)\//g)[0].replace('content@=', '')  : "error";
         snick = snick.substring(0, snick.length - 1);
         content = content.substring(0, content.length - 1);
         console.log(snick + ': ' + content); // 弹幕
@@ -107,3 +107,32 @@ socket.on('data', function(data) {
 //        console.log("1"); //在这里显示其它类型的消息
     }
 })
+
+
+
+Notification.requestPermission().then(function(permission) {
+            if(permission === 'granted'){
+                console.log('用户允许通知');
+                var n = new Notification('状态更新提醒',{
+                    body: '你的朋友圈有3条新状态，快去查看吧',
+                    tag: 'linxin',
+                    data: {
+                        url: 'http://blog.gdfengshuo.com'
+                    },
+                    icon: 'http://blog.gdfengshuo.com/images/avatar.jpg',
+                    image:'http://blog.gdfengshuo.com/images/avatar.jpg',
+                    requireInteraction: true
+                })
+
+                /* setTimeout(function() {
+                    n.close();
+                }, 3000); */
+
+                n.onclick = function(){
+                    window.open(n.data.url, '_blank');      // 打开网址
+                    n.close();                              // 并且关闭通知
+                }
+            }else if(permission === 'denied'){
+                console.log('用户拒绝通知');
+            }
+});
