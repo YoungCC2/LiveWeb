@@ -108,8 +108,3 @@ socket.on('data', function(data) {
     }
 })
 
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 6fd27c23fdcd6e1b7588acca6c8c1a4befcc9b7f
