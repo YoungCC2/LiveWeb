@@ -519,6 +519,11 @@ app.get('/elma',function(req,res,next){
 app.get('/cs',function(req,res,next){
     res.send('ok');
 })
+
+app.get('/find',function(req,res,next){
+    
+})
+
 app.listen(3000, function(req, res) {
     console.log('app is running at port 3000');
 });
