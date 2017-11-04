@@ -4,7 +4,7 @@ var md5 = require('md5');
 var request = require('request');
 
 var HOST = '220.167.12.147';
-var PORT = 12602;
+var PORT = 8601;
 
 var  roomid = "606118";
 var user = ""
@@ -82,7 +82,7 @@ socket.on('data', function(data) {
         //            console.log('gid of room[' + roomid + '] is ' + gid)
         //            send(socket, 'type@=joingroup/rid@=' + 65962 + '/gid@=' + 2 + '/');
         //        });
-        send(socket, 'type@=joingroup/rid@=' + 507882 + '/gid@=' + -9999 + '/');
+        send(socket, 'type@=joingroup/rid@=' + 58428 + '/gid@=' + -9999 + '/');
     } else if (data.indexOf('type@=chatmsg') >= 0) {
         var msg = data.toString();
         var snick = msg.match(/nn@=(.*?)\//g)[0].replace('snick@=', '');
@@ -110,29 +110,3 @@ socket.on('data', function(data) {
 
 
 
-Notification.requestPermission().then(function(permission) {
-            if(permission === 'granted'){
-                console.log('用户允许通知');
-                var n = new Notification('状态更新提醒',{
-                    body: '你的朋友圈有3条新状态，快去查看吧',
-                    tag: 'linxin',
-                    data: {
-                        url: 'http://blog.gdfengshuo.com'
-                    },
-                    icon: 'http://blog.gdfengshuo.com/images/avatar.jpg',
-                    image:'http://blog.gdfengshuo.com/images/avatar.jpg',
-                    requireInteraction: true
-                })
-
-                /* setTimeout(function() {
-                    n.close();
-                }, 3000); */
-
-                n.onclick = function(){
-                    window.open(n.data.url, '_blank');      // 打开网址
-                    n.close();                              // 并且关闭通知
-                }
-            }else if(permission === 'denied'){
-                console.log('用户拒绝通知');
-            }
-});
