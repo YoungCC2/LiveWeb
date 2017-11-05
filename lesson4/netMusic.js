@@ -11,7 +11,7 @@ var app = express();
 
 
 app.get('/', function (req, res, next) {
-    var url = 'http://music.163.com/djradio?id=1813003&order=1&_hash=programlist&limit=100&offset=0'
+    var url = 'http://music.163.com/djradio'
 
     function setQuery() {
         return {
@@ -19,7 +19,7 @@ app.get('/', function (req, res, next) {
             "order": "1",
             "_hash": "programlist",
             "limit": 100,
-            "offset": 0
+            "offset": 1000
         }
     }
     var baseheader = {
@@ -35,8 +35,10 @@ app.get('/', function (req, res, next) {
         "Upgrade-Insecure-Requests": "1",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
     }
+    //#songlist-512984676 td.col2 div a
     request
         .get(url)
+        .query(setQuery())
         .set(baseheader)
         .end(function (err, sres) {
             if (err) {
@@ -44,8 +46,22 @@ app.get('/', function (req, res, next) {
                 return next(err);
             } else {
                 var $ = cheerio.load(sres.text);
-                var _table = $(".n-songtb table tbody tr#songlist-512984676 td.col2 div a").attr("href")
-                res.send(_table);
+                var _tbody  =  $(".n-songtb table tbody");
+                var _tr = _tbody.children().length;
+                var _trContent = '',_trHref='',_trTitle='';
+                var _hrefArr = [];
+                for(var i =0 ;i<_tr; i++){
+                    _trHref = _tbody.children("tr").eq(i).find("td.col2 div a").attr("href");
+                    _trTitle = _tbody.children("tr").eq(i).find("td.col2 div a").attr("title");
+                    if(_trHref !== ""){
+                       /*_hrefArr[i] = "http://music.163.com" + _trHref;*/
+                        _hrefArr.push({
+                            href:"http://music.163.com" + _trHref,
+                            title:_trTitle
+                        })
+                    }
+                }
+                res.send(_hrefArr);
             }
         })
 })
