@@ -104,7 +104,6 @@ app.get('/home', function(req, res, next) {
         domain_op: '100505',
         __rnd: '1505200425930'
     }
-    mongod.exe --logpath D:\MongoDB\Server\3.4\logs\mongodb.log --logappend --dbpath D:\MongoDB\Server\3.4\data --directoryperdb --serviceName MongoDB -install  
     function setParam(page, pagebar) {
         return {
             ajwvr: '6',
