@@ -8,9 +8,17 @@ var async = require('async');
 var path = require('path');
 var fs = require('fs');
 var app = express();
+var bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+app.use(bodyParser.text());
+app.use(bodyParser.json());
 
 
 app.get('/', function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
     var _url = 'https://www.zhihu.com/api/v4/members/excited-vczh/answers';
     var baseheader = {
         "Accept": "application/json, text/plain, */*",
@@ -64,6 +72,18 @@ app.get('/', function (req, res, next) {
 
 })
 
+
+app.post('/test',function(req, res, next){
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header("Content-Type", "application/json;charset=utf-8");
+    console.log( 'ajax' , req.body );
+    var resp = {
+        "msg":'请求成功',
+        "id":"1",
+        "name":"req.body.name"
+    }
+    res.end(JSON.stringify(resp))  //回应浏览器
+})
 app.listen(3000, function(req, res) {
     console.log('app is running at port 3000');
 });

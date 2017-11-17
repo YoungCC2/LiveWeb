@@ -21,6 +21,8 @@
     "utility": "^1.12.0"
   },
   "devDependencies": {
+    "body-parser": "^1.18.2",
+    "crypto": "^1.0.1",
     "md5": "^2.2.1",
     "net": "^1.0.2",
     "node-uuid": "^1.4.8",
