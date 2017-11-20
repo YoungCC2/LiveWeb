@@ -36,39 +36,65 @@ app.get('/', function (req, res, next) {
         "X-UDID":'AEDCu2OaZwyPTkFdLWgkHyfNqqT7-RRU2QU='
     }
 
-    var param = function(){
-        return {
-            include:'data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,review_info,question,excerpt,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp,upvoted_followees;data[*].author.badge[?(type=best_answerer)].topics',
-            offset:20,
+    var param = function(pages){
+        return {    
+           include:'data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,review_info,question,excerpt,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp,upvoted_followees;data[*].author.badge[?(type=best_answerer)].topics',
+            offset:pages,
             limit:20,
             sort_by:'created'
         }
     }
-    request
-        .get(_url)
-        .set(baseheader)
-        .query(param())
-        .end(function(err,sres){
-            if(err){
-                console.log('err');
-                return next(err);
-            }else{
-                var data = JSON.parse(sres.text);
-                var question = [];
-                
-                data.data.map(function(k,v){
-                    question.push({
-                        title:k['question']['title'],
-                        url:k['question']['url'],
-                        content:{
-                            s:k['content']
-                        }
+    var topicUrls = [1,2,3,4,5,6,7,8,9,10];
+    var requestFun = function(num,callback){
+        request
+            .get(_url)
+            .set(baseheader)
+            .query(param(num))
+            .end(function(err,sres){
+                if(err){
+                    console.log('err');
+                    return next(err);
+                }else{
+                    var resData = JSON.parse(sres.text);
+                    var question = [];
+                    var totals = resData.paging.totals; //所有消息数
+                    var totalPage = totals%20 === 0 ? parseInt(totals/20) : parseInt(totals/20+1); //所有页数
+                    resData.data.map(function(k,v){
+                        question.push({
+                            title:k['question']['title'],
+                            url:k['question']['url'],
+                            content:{
+                                s:k['content']
+                            }
+                        })
                     })
-                })
-                res.send(question)
-                 
+                    
+                    if(num==9){
+                        res.send(question)
+                    }else{
+                        callback(null, "successful !");
+                    }
+
+                }
+            })
+       
+    }
+    
+    
+    var awaits = function(num){
+        async.mapLimit(topicUrls, num, function(item, callback) {
+            console.log("已开始爬取" + item + "页");
+            requestFun(item*20, callback);
+        }, function(err, result) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send('ok');
+                console.log("全部已爬取完毕！");
             }
-        })
+        });
+    }
+    awaits(1);
 
 })
 
