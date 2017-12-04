@@ -9,7 +9,7 @@ var path = require('path');
 var fs = require('fs');
 var app = express();
 var conf = require('./conf.json');
-// var imgSrc = require('./src.json');
+ var imgSrc = require('./src.json');
 var mainMenu = require('./mainMenu.json');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
@@ -24,48 +24,48 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
-app.get('/', function(req, res, next) {
-    var base_headers = {
-        Accept: '*/*',
-        'Accept-Encoding': "gzip, deflate, br",
-        'Accept-Language': "zh-CN,zh;q=0.8",
-        'Cache-Control': "no-cache",
-        Connection: "keep-alive",
-        'Content-Length': 134,
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        Cookie: 'q_c1=62d5f26ce2fd4e5e8a38704aec45b8e9|1503283193000|1503283193000; d_c0="AICCkPW9QAyPTknAeJGK5-IE4OZpCufkBro=|1503283194"; _zap=c1a8d9a4-740c-47a5-8148-0fd79ab26673; _ga=GA1.2.689365114.1504495941; _gid=GA1.2.1908057380.1504690297; aliyungf_tc=AQAAAG+HfQKeagwAHqZVfXMIa12cSy8R; _xsrf=8273a28f-ebe9-4c36-bf93-1c60bb68b7fb; cap_id="MzRjOGM3OTM2MmE4NDQ1ZTk3Y2UyNzgwODIzNDUwMDU=|1504748488|0fd04130dc7fc89e2de20406d6ca05f2f21e3d79"; l_cap_id="MzkyN2ZmNDA0MDVkNDgyMThiZjU4ZGM5NGE5ZTk4MjU=|1504748488|0f2a2722dfa96076bc2defe8fbd02ad4b48c8298"; __utma=51854390.689365114.1504495941.1504690239.1504747604.6; __utmb=51854390.0.10.1504747604; __utmc=51854390; __utmz=51854390.1504747604.6.6.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.000--|2=registration_date=20130507=1^3=entry_date=20170821=1',
-        Host: 'www.zhihu.com',
-        Origin: 'https://www.zhihu.com',
-        Pragma: 'no-cache',
-        Referer: 'https://www.zhihu.com/',
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-Xsrftoken': '8273a28f-ebe9-4c36-bf93-1c60bb68b7fb'
-    }
-
-    var data = {
-        "_xsrf": "38323733613238662d656265392d346333362d626639332d316336306262363862376662",
-        "password": "APTX4869",
-        "captcha_type": 'cn',
-        "phone_num": '18380441425'
-    }
-    request
-        .post('https://www.zhihu.com/login/phone_num')
-        .set(base_headers)
-        .type('form')
-        .send(data)
-        .redirects(0)
-        .end((err, ares) => {
-            cookir = ares.headers["set-cookie"]
-            console.log(cookir);
-            /*request
-                .get('https://www.zhihu.com/')
-                .end(function (err, sres) {
-                    console.log(sres);
-                });*/
-            res.send(JSON.parse(cookir))
-        });
-});
+//app.get('/', function(req, res, next) {
+//    var base_headers = {
+//        Accept: '*/*',
+//        'Accept-Encoding': "gzip, deflate, br",
+//        'Accept-Language': "zh-CN,zh;q=0.8",
+//        'Cache-Control': "no-cache",
+//        Connection: "keep-alive",
+//        'Content-Length': 134,
+//        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//        Cookie: 'q_c1=62d5f26ce2fd4e5e8a38704aec45b8e9|1503283193000|1503283193000; d_c0="AICCkPW9QAyPTknAeJGK5-IE4OZpCufkBro=|1503283194"; _zap=c1a8d9a4-740c-47a5-8148-0fd79ab26673; _ga=GA1.2.689365114.1504495941; _gid=GA1.2.1908057380.1504690297; aliyungf_tc=AQAAAG+HfQKeagwAHqZVfXMIa12cSy8R; _xsrf=8273a28f-ebe9-4c36-bf93-1c60bb68b7fb; cap_id="MzRjOGM3OTM2MmE4NDQ1ZTk3Y2UyNzgwODIzNDUwMDU=|1504748488|0fd04130dc7fc89e2de20406d6ca05f2f21e3d79"; l_cap_id="MzkyN2ZmNDA0MDVkNDgyMThiZjU4ZGM5NGE5ZTk4MjU=|1504748488|0f2a2722dfa96076bc2defe8fbd02ad4b48c8298"; __utma=51854390.689365114.1504495941.1504690239.1504747604.6; __utmb=51854390.0.10.1504747604; __utmc=51854390; __utmz=51854390.1504747604.6.6.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.000--|2=registration_date=20130507=1^3=entry_date=20170821=1',
+//        Host: 'www.zhihu.com',
+//        Origin: 'https://www.zhihu.com',
+//        Pragma: 'no-cache',
+//        Referer: 'https://www.zhihu.com/',
+//        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
+//        'X-Requested-With': 'XMLHttpRequest',
+//        'X-Xsrftoken': '8273a28f-ebe9-4c36-bf93-1c60bb68b7fb'
+//    }
+//
+//    var data = {
+//        "_xsrf": "38323733613238662d656265392d346333362d626639332d316336306262363862376662",
+//        "password": "APTX4869",
+//        "captcha_type": 'cn',
+//        "phone_num": '18380441425'
+//    }
+//    request
+//        .post('https://www.zhihu.com/login/phone_num')
+//        .set(base_headers)
+//        .type('form')
+//        .send(data)
+//        .redirects(0)
+//        .end((err, ares) => {
+//            cookir = ares.headers["set-cookie"]
+//            console.log(cookir);
+//            /*request
+//                .get('https://www.zhihu.com/')
+//                .end(function (err, sres) {
+//                    console.log(sres);
+//                });*/
+//            res.send(JSON.parse(cookir))
+//        });
+//});
 
 app.get('/home', function(req, res, next) {
     var connection = mysql.createConnection({
@@ -310,7 +310,7 @@ app.get('/img', function(req, res, next) {
 })
 
 app.get('/downloadImg', function(req, res, next) {
-    console.log(imgSrc);
+  
 
     function down(imgSrc) {
         var Uurl = imgSrc;
@@ -515,8 +515,29 @@ app.get('/elma',function(req,res,next){
         })
 });
 
-app.get('/cs',function(req,res,next){
-    res.send('ok');
+//下载图片
+app.get('/cs', function (req, res, next) {
+    var currDir = path.normalize(req.query.dir),
+        fileName = req.query.name,
+        currFile = path.join(currDir, fileName),
+        fReadStream;
+    fs.exists(currFile, function (exist) {
+        if (exist) {
+            res.set({
+                "Content-type": "application/octet-stream",
+                "Content-Disposition": "attachment;filename=" + encodeURI(fileName)
+            });
+            fReadStream = fs.createReadStream(currFile);
+            fReadStream.on("data", (chunk) => res.write(chunk, "binary"));
+            fReadStream.on("end", function () {
+                res.end();
+            });
+        } else {
+            res.set("Content-type", "text/html");
+            res.send("file not exist!");
+            res.end();
+        }
+    });
 })
 
 app.get('/find',function(req,res,next){

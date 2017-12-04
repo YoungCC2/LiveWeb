@@ -9,14 +9,22 @@ var path = require('path');
 var fs = require('fs');
 var app = express();
 var bodyParser = require('body-parser');
+var events = require("events");
+var open = require("open");
+var schedule = require("node-schedule");
+var nodemailer = require('nodemailer');
+
+var emitter = new events.EventEmitter()
+
+//setCookeie();
+//emitter.on("setCookeie", getTitles)            //监听setCookeie事件
+
 
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.text());
 app.use(bodyParser.json());
-
-
 app.get('/', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     var _url = 'https://www.zhihu.com/api/v4/members/excited-vczh/answers';
@@ -113,6 +121,8 @@ app.post('/test',function(req, res, next){
 
 
 app.get('/nb',function(req,res,next){
+    open("https://www.niuplay.net/", "firefox"); //耀东
+    open("https://www.niuplay.net/", "chrome"); //晓东
     var _url = 'https://www.niuplay.net/UserAjax/SignInDay?t=0.4781838105684555';
     var baseheader = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -120,36 +130,64 @@ app.get('/nb',function(req,res,next){
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'NIUGAME_think_language=zh-CN; PHPSESSID=19vq0gadf1te9mdmecp5m5j4o0; _gat=1; NIUGAME_DIFUEIJSD=2971e35c6354e74cb584b570698d6dd2; _ga=GA1.2.841253121.1511167550; _gid=GA1.2.1793202359.1511167550',
+        "Cookie": 'PHPSESSID=19vq0gadf1te9mdmecp5m5j4o0; NIUGAME_think_language=zh-CN; _gat=1; NIUGAME_DIFUEIJSD=a49dcdf7dde74877a52e4659731fa631; _ga=GA1.2.84060275.1511506135; _gid=GA1.2.440742571.1511759961',
         "Host": "www.niuplay.net",
-        "Pragma":"no-cache",
-        "Referer":'https://www.niuplay.net/',
+        "Pragma": "no-cache",
+        "Referer": 'https://www.niuplay.net/',
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
-        "X-Requested-With":'XMLHttpRequest'
+        "X-Requested-With": 'XMLHttpRequest'
     }
-
-    var param = function(){
-        return {
-            include:'data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action,annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content,voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,review_info,question,excerpt,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp,upvoted_followees;data[*].author.badge[?(type=best_answerer)].topics',
-            offset:20,
-            limit:20,
-            sort_by:'created'
-        }
+    var XDDDDbaseheader = {
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Cookie": 'NIUGAME_think_language=zh-CN; PHPSESSID=m88r3u43f77133t7g8rvc89j85; _ga=GA1.2.1649831064.1512008753; _gid=GA1.2.1723359070.1512008753; _gat=1; NIUGAME_DIFUEIJSD=54de7f9457856b87f34233a83de37765',
+        "Host": "www.niuplay.net",
+        "Pragma": "no-cache",
+        "Referer": 'https://www.niuplay.net/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+        "X-Requested-With": 'XMLHttpRequest'
     }
-    request
+    var count = 0;
+    setTimeout(function(){
+        request
         .get(_url)
-        .set(baseheader)
-        .end(function(err,sres){
-            if(err){
+        .set(XDDDDbaseheader)
+        .end(function (err, ss) {
+            if (err) {
                 console.log('err');
                 return next(err);
-            }else{
-                res.send(sres.text)
+            } else {
+                count++;
+                console.log("耀东",count,ss.text);
+                if (count == 2) {
+                    res.send('所有请求完毕')
+                }
             }
         })
-
-})
-
+    },5000)
+    setTimeout(function(){
+        request
+        .get(_url)
+        .set(baseheader)
+        .end(function (err, ss) {
+            if (err) {
+                console.log('err');
+                return next(err);
+            } else {
+                count++;
+                console.log("晓东",count,ss.text);
+                if (count == 2) {
+                    res.send('所有请求完毕')
+                }
+            }
+        })
+    },5000)
+    
+    
+});
 app.get('/net',function(req,res,next){
     var _url = 'http://music.163.com/weapi/point/dailyTask?csrf_token=2d3fc4aaf219f561b0b598c4bef8af97';
     var baseheader = {
@@ -189,6 +227,123 @@ app.get('/net',function(req,res,next){
 
 })
 
-app.listen(3000, function(req, res) {
-    console.log('app is running at port 3000');
+app.get('/down',function(){
+    res.send(filesss);
+})
+
+
+
+/*var rule = new schedule.RecurrenceRule();
+rule.second = 10;
+这是每当秒数为10时打印时间。如果想每隔10秒执行，设置 rule.second =[0,10,20,30,40,50]即可。
+rule支持设置的值有second,minute,hour,date,dayOfWeek,month,year
+同理:
+每秒执行就是rule.second =[0,1,2,3......59]
+每分钟0秒执行就是rule.second =0
+每小时30分执行就是rule.minute =30;rule.second =0;
+每天0点执行就是rule.hour =0;rule.minute =0;rule.second =0;
+....
+每月1号的10点就是rule.date =1;rule.hour =10;rule.minute =0;rule.second =0;
+每周1，3，5的0点和12点就是rule.dayOfWeek =[1,3,5];rule.hour =[0,12];rule.minute =0;rule.second =0;*/
+
+
+var smtpConfig = {
+    host: 'smtp.163.com',
+    port: 465,
+    auth: {
+        user: 'yh4063254@163.com',
+        pass: 'APTX4869'
+    }
+};
+var transporter = nodemailer.createTransport(smtpConfig);
+var sendmail = function (html) {
+    var option = {
+        from: "yh4063254@163.com",
+        to: "743472220@qq.com",
+        subject: '来自node的邮件',
+        html: html,
+        attachments: []
+    }
+    transporter.sendMail(option, function (error, response) {
+        if (error) {
+            console.log("fail: " + error);
+        } else {
+            console.log("success: " + response.messageID);
+        }
+    });
+}
+var rule = new schedule.RecurrenceRule();
+rule.hour =10;rule.minute =26;rule.second =0;
+schedule.scheduleJob(rule, function () {　　
+    open("https://www.niuplay.net/", "firefox"); //耀东
+    open("https://www.niuplay.net/", "chrome"); //晓东
+    var _url = 'https://www.niuplay.net/UserAjax/SignInDay?t=0.4781838105684555';
+    var baseheader = {
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Cookie": 'PHPSESSID=19vq0gadf1te9mdmecp5m5j4o0; NIUGAME_think_language=zh-CN; _gat=1; NIUGAME_DIFUEIJSD=a49dcdf7dde74877a52e4659731fa631; _ga=GA1.2.84060275.1511506135; _gid=GA1.2.440742571.1511759961',
+        "Host": "www.niuplay.net",
+        "Pragma": "no-cache",
+        "Referer": 'https://www.niuplay.net/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+        "X-Requested-With": 'XMLHttpRequest'
+    }
+    var XDDDDbaseheader = {
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Cookie": 'NIUGAME_think_language=zh-CN; PHPSESSID=m88r3u43f77133t7g8rvc89j85; _ga=GA1.2.1649831064.1512008753; _gid=GA1.2.1723359070.1512008753; _gat=1; NIUGAME_DIFUEIJSD=54de7f9457856b87f34233a83de37765',
+        "Host": "www.niuplay.net",
+        "Pragma": "no-cache",
+        "Referer": 'https://www.niuplay.net/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+        "X-Requested-With": 'XMLHttpRequest'
+    }
+    function requestUrl(baseHeader,cb){
+        request
+        .get(_url)
+        .set(baseHeader)
+        .end(function (err, ss) {
+            if (err) {
+                console.log('err');
+                return next(err);
+            } else {
+                cb(null, 'str_b');
+                console.log("成功一条",ss.text);
+                
+            }
+        })
+    }
+    var headerArr = [baseheader,XDDDDbaseheader];
+    function res(num) {
+        async.mapLimit(headerArr, num, function (item, callback) {
+            requestUrl(item, callback)
+        },function(err,result){
+              if (err) {
+                console.log(err);
+                sendmail("邮件内容：<br/>签到失败!"+new Date().toString())
+            } else {
+                console.log("全部已爬取完毕！");
+                sendmail("邮件内容：<br/>全部签到完毕!"+new Date().toString())
+            }
+        });
+    }
+    setTimeout(function () {
+        res(2);
+    }, 5000)
+    
+    
 });
+
+//app.listen(3000, function(req, res) {
+//    console.log('app is running at port 3000');
+//});
+
+
+
+
