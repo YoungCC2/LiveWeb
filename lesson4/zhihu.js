@@ -273,8 +273,9 @@ var sendmail = function (html) {
     });
 }
 var rule = new schedule.RecurrenceRule();
-rule.hour =10;rule.minute =26;rule.second =0;
-schedule.scheduleJob(rule, function () {　　
+rule.hour =0;rule.minute =0;rule.second =0;
+
+schedule.scheduleJob(rule, function () {
     open("https://www.niuplay.net/", "firefox"); //耀东
     open("https://www.niuplay.net/", "chrome"); //晓东
     var _url = 'https://www.niuplay.net/UserAjax/SignInDay?t=0.4781838105684555';
@@ -284,7 +285,7 @@ schedule.scheduleJob(rule, function () {　　
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'PHPSESSID=19vq0gadf1te9mdmecp5m5j4o0; NIUGAME_think_language=zh-CN; _gat=1; NIUGAME_DIFUEIJSD=a49dcdf7dde74877a52e4659731fa631; _ga=GA1.2.84060275.1511506135; _gid=GA1.2.440742571.1511759961',
+        "Cookie": 'PHPSESSID=19vq0gadf1te9mdmecp5m5j4o0; NIUGAME_think_language=zh-CN; _gat=1; NIUGAME_DIFUEIJSD=874560ffc5fefb427f794687b483546c; _ga=GA1.2.84060275.1511506135; _gid=GA1.2.552560005.1512181564',
         "Host": "www.niuplay.net",
         "Pragma": "no-cache",
         "Referer": 'https://www.niuplay.net/',
@@ -304,6 +305,7 @@ schedule.scheduleJob(rule, function () {　　
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
         "X-Requested-With": 'XMLHttpRequest'
     }
+    
     function requestUrl(baseHeader,cb){
         request
         .get(_url)
@@ -313,7 +315,7 @@ schedule.scheduleJob(rule, function () {　　
                 console.log('err');
                 return next(err);
             } else {
-                cb(null, 'str_b');
+                cb(null, ss.text);
                 console.log("成功一条",ss.text);
                 
             }
@@ -329,7 +331,7 @@ schedule.scheduleJob(rule, function () {　　
                 sendmail("邮件内容：<br/>签到失败!"+new Date().toString())
             } else {
                 console.log("全部已爬取完毕！");
-                sendmail("邮件内容：<br/>全部签到完毕!"+new Date().toString())
+                sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+ result)
             }
         });
     }
@@ -338,7 +340,54 @@ schedule.scheduleJob(rule, function () {　　
     }, 5000)
     
     
+    
+    
+    ///////////////////////////////////////////////////
+    function netest() {
+        var _url = 'http://music.163.com/weapi/point/dailyTask?csrf_token=2d3fc4aaf219f561b0b598c4bef8af97';
+        var baseheader = {
+            "Accept": "application/json, text/javascript, */*; q=0.01",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "Content-Length": "410",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Cookie": 'JSESSIONID-WYYY=ml8%2Fb674N9DdP3xk%5Cp7fubW7IMdB18m2rvBwRPFqCzjgaMhhu4%5C3F%2FtkDHF9d3OJfSkTJR04Jta%2B7ttBzgDCBCWfn822Bhj51TSX8k3sJMNBfyGHA7BQxxSToVYTZ2gTwpBj%5CfZnTkitH7aa8a%2FyPdp4xZckGrwt4I0VnzcH8wdbAzpj%3A1511172962906; _iuqxldmzr_=32; _ntes_nnid=6fc3b1bb93daf2ea239a0f115276697f,1511171162937; _ntes_nuid=6fc3b1bb93daf2ea239a0f115276697f; __remember_me=true; MUSIC_U=93181d58e76bc8684b776ba7d9000ba337ec05c0e61b284fa5fad1e08ee7da7bec419a81eb06bd7eeb42834e2608436941049cea1c6bb9b6; __csrf=2d3fc4aaf219f561b0b598c4bef8af97; __utma=94650624.1121442284.1511171163.1511171163.1511171163.1; __utmb=94650624.6.10.1511171163; __utmc=94650624; __utmz=94650624.1511171163.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic',
+            "Host": "music.163.com",
+            "Origin": "http://music.163.com",
+            "Pragma": "no-cache",
+            "Referer": 'http://music.163.com/discover',
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+        }
+
+        var param = function () {
+            return {
+                params: 'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
+                encSecKey: 'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
+            }
+        }
+        request
+            .post(_url)
+            .set(baseheader)
+            .send(param())
+            .end(function (err, sres) {
+                if (err) {
+                    console.log('err');
+                    return next(err);
+                } else {
+                    console.log(sres.text)
+                }
+            })
+    }
+    
+    netest();
 });
+
+
+
+
+
 
 //app.listen(3000, function(req, res) {
 //    console.log('app is running at port 3000');
