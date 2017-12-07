@@ -7,7 +7,7 @@ var postData = querystring.stringify({
   "lan": "zh",    // zh表示中文
   "ie": "UTF-8",  // 字符编码
   "spd": 5,       // 表示朗读的语速，9代表最快，1是最慢（撩妹请用2，绕口令请用9）
-  "text": "I think maths take more time to practice than other subjects"   // 这句话就是要转换为语音的
+  "text": "hello"   // 这句话就是要转换为语音的
 });
 
 var options = {

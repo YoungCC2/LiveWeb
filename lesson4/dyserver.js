@@ -4,7 +4,7 @@ var md5 = require('md5');
 var request = require('request');
 
 var HOST = '118.118.218.253';//
-var PORT = 8602; //8601,12602,12601
+var PORT = 8601; //8601,12602,12601,8602
 
 var  roomid = "606118";
 var user = ""
@@ -26,7 +26,7 @@ function getGroupServer(roomid, callback)
 /*		var server_config = JSON.parse(body.match(/room_args = (.*?)\}\;/g)[0].replace('room_args = ', '').replace(';', ''));
         console.log(server_config);
 //		server_config = JSON.parse(unescape(server_config['server_config']));*/
-	     callback("118.118.218.250", "8602");
+	     callback("118.118.218.250", "8601");
 	});
 }
 
