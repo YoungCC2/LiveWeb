@@ -3,7 +3,7 @@ var uuid = require('node-uuid');
 var md5 = require('md5');
 var request = require('request');
 
-var HOST = '220.167.12.147';
+var HOST = '118.118.218.253';//
 var PORT = 8602; //8601,12602,12601
 
 var  roomid = "606118";
@@ -18,7 +18,6 @@ function send(socket, payload) {
         data.write(payload, 12); //payload
         data.writeInt8(0, 4 + 4 + 4 + payload.length); //end of string
         socket.write(data)
-    
     }
 
 function getGroupServer(roomid, callback)
@@ -82,7 +81,7 @@ socket.on('data', function(data) {
         //            console.log('gid of room[' + roomid + '] is ' + gid)
         //            send(socket, 'type@=joingroup/rid@=' + 65962 + '/gid@=' + 2 + '/');
         //        });
-        send(socket, 'type@=joingroup/rid@=' + 208114 + '/gid@=' + -9999 + '/');
+        send(socket, 'type@=joingroup/rid@=' + 58428 + '/gid@=' + -9999 + '/');
     } else if (data.indexOf('type@=chatmsg') >= 0) {
         var msg = data.toString();
         var snick = msg.match(/nn@=(.*?)\//g)[0].replace('snick@=', '');
