@@ -7,7 +7,7 @@ var postData = querystring.stringify({
   "lan": "zh",    // zh表示中文
   "ie": "UTF-8",  // 字符编码
   "spd": 5,       // 表示朗读的语速，9代表最快，1是最慢（撩妹请用2，绕口令请用9）
-  "text": "hello"   // 这句话就是要转换为语音的
+  "text": "洪崖洞，位于重庆直辖市核心商圈解放碑沧白路，长江、嘉陵江两江交汇的滨江地带，坐拥城市旅游景观、商务休闲景观和城市人文景观于一体。以具巴渝传统建筑特色的“吊脚楼”风貌为主体，依山就势，沿江而建，解放碑直达江滨。"   // 这句话就是要转换为语音的
 });
 
 var options = {
@@ -28,7 +28,7 @@ var req = http.request(options, function (res) {
     // 这里用到了Buffer模块，大概意思就是把获取到的语音文件流存入到body里面，body是一个Buffer
     var body = Buffer.concat(chunks);
     // 生成的mp3文件存储的路径，文件名叫做iloveu.mp3
-    var filePath = path.normalize('./yhs.mp3');
+    var filePath = path.normalize('./viewAudio/hyd.mp3');
     // fs模块写文件    
     fs.writeFileSync(filePath, body);
   });

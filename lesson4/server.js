@@ -9,12 +9,13 @@ var path = require('path');
 var fs = require('fs');
 var app = express();
 var conf = require('./conf.json');
- var imgSrc = require('./src.json');
+// var imgSrc = require('./src.json');
 var mainMenu = require('./mainMenu.json');
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
 var open = require("open");
 var nodemailer = require('nodemailer');
+const  os=require('os');
 
 
 // open("http://www.baidu.com", "firefox");
@@ -540,10 +541,22 @@ app.get('/cs', function (req, res, next) {
     });
 })
 
-app.get('/find',function(req,res,next){
-    
+app.get('/find', function (req, res, next) {
+    res.send({
+        hostname:os.hostname(),
+        networkInterfaces:os.networkInterfaces(),
+        release:os.release(),
+        totalmem:os.totalmem()/1024/1024/1024,
+        type:os.type(),
+        uptime:os.uptime(),
+        platform:os.platform(),
+        endianness:os.endianness(),
+        cpus:os.cpus(),
+        freemem:os.freemem()/1024/1024/1024
+    });
+//    console.log(arch);
 })
 
-app.listen(3000, function(req, res) {
-    console.log('app is running at port 3000');
+app.listen(8888, function(req, res) {
+    console.log('app is running at port 8888');
 });

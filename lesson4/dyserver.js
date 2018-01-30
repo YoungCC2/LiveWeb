@@ -2,9 +2,9 @@ var net = require('net');
 var uuid = require('node-uuid');
 var md5 = require('md5');
 var request = require('request');
-
-var HOST = '220.167.12.147';
-var PORT = 8601; //8601,12602,12601,8602
+//118.118.218.253   
+var HOST = '118.118.218.253';
+var PORT = 12601; //8601,12602,12601,8602
 
 var  roomid = "606118";
 var user = ""
@@ -74,7 +74,8 @@ var socket = net.connect(PORT, HOST, function () {
 setInterval(function() {
     send(socket, 'type@=keeplive/tick@=70/'); //send keep alive message repeatly
 }, 50000);
-
+//532152
+//1720665  安迪
 socket.on('data', function(data) {
     if (data.indexOf('type@=loginres') >= 0) {
             //登录成功 
@@ -82,7 +83,7 @@ socket.on('data', function(data) {
         //            console.log('gid of room[' + roomid + '] is ' + gid)
         //            send(socket, 'type@=joingroup/rid@=' + 65962 + '/gid@=' + 2 + '/');
         //        });
-        send(socket, 'type@=joingroup/rid@=' + 58428 + '/gid@=' + -9999 + '/');
+        send(socket, 'type@=joingroup/rid@=' + 1720665 + '/gid@=' + -9999 + '/');
     } else if (data.indexOf('type@=chatmsg') >= 0) {
         var msg = data.toString();
         var snick = msg.match(/nn@=(.*?)\//g)[0].replace('snick@=', '');

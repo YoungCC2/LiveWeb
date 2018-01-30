@@ -13,7 +13,7 @@ var events = require("events");
 var open = require("open");
 var schedule = require("node-schedule");
 var nodemailer = require('nodemailer');
-
+var child_process = require('child_process')
 var emitter = new events.EventEmitter()
 
 //setCookeie();
@@ -273,42 +273,57 @@ var sendmail = function (html) {
     });
 }
 var rule = new schedule.RecurrenceRule();
-rule.hour =0;rule.minute =0;rule.second =0;
+rule.hour =9;rule.minute =46;rule.second =0;
 
+
+console.log(rule);
 schedule.scheduleJob(rule, function () {
-    open("https://www.niuplay.net/", "firefox"); //耀东
-    open("https://www.niuplay.net/", "chrome"); //晓东
-    var _url = 'https://www.niuplay.net/UserAjax/SignInDay?t=0.4781838105684555';
-    var baseheader = {
+    open("https://www.niusport.net/", "firefox"); //耀东
+    open("https://www.niusport.net/", "chrome"); //晓东
+    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niusport.net/");
+    var _url = 'https://www.niusport.net/UserAjax/SignInDay?t=0.17865249360840885';
+    var mxd = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'PHPSESSID=19vq0gadf1te9mdmecp5m5j4o0; NIUGAME_think_language=zh-CN; _gat=1; NIUGAME_DIFUEIJSD=874560ffc5fefb427f794687b483546c; _ga=GA1.2.84060275.1511506135; _gid=GA1.2.552560005.1512181564',
+        "Cookie": 'PHPSESSID=9ttneb0571tc3pno8c3irmh8m0; __jsluid=38534c5e4a4f59a7b573983fb8939156; _ga=GA1.2.487547688.1516723206; _gid=GA1.2.1154735853.1516809606; NIUGAME_think_language=zh-CN; NIUGAME_DIFUEIJSD=5ed6d167f5d72ad5bd249834b52a7611; _gat=1',
         "Host": "www.niuplay.net",
         "Pragma": "no-cache",
         "Referer": 'https://www.niuplay.net/',
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
         "X-Requested-With": 'XMLHttpRequest'
     }
-    var XDDDDbaseheader = {
+    var wyd = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'NIUGAME_think_language=zh-CN; PHPSESSID=m88r3u43f77133t7g8rvc89j85; _ga=GA1.2.1649831064.1512008753; _gid=GA1.2.1723359070.1512008753; _gat=1; NIUGAME_DIFUEIJSD=54de7f9457856b87f34233a83de37765',
+        "Cookie": '__jsluid=4b14fb88f7ac0450aa54cf2dda341f6f; PHPSESSID=9o5bgodqug0m38g231v7rvrbh4; _ga=GA1.2.1251069339.1516723208; _gid=GA1.2.1941227369.1516809613; NIUGAME_think_language=zh-CN; NIUGAME_DIFUEIJSD=0dc649764a6aa289c34657dda4241fe7',
         "Host": "www.niuplay.net",
         "Pragma": "no-cache",
         "Referer": 'https://www.niuplay.net/',
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
         "X-Requested-With": 'XMLHttpRequest'
     }
-    
+    var yh = {
+        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "zh-CN,zh;q=0.9",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+        "Cookie": '__jsluid=bd35f313e872947784c07e9964b188af; NIUGAME_DIFUEIJSD=06ac7dc604cc2bdcc2c613dacded36c5; PHPSESSID=bt0su11dm7r448oavasnf47st2; NIUGAME_think_language=zh-CN; _ga=GA1.2.1774454551.1516723211; _gid=GA1.2.1527420838.1516723211',
+        "Host": "www.niuplay.net",
+        "Pragma": "no-cache",
+        "Referer": 'https://www.niuplay.net/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
+        "X-Requested-With": 'XMLHttpRequest'
+    }
     function requestUrl(baseHeader,cb){
         request
-        .get(_url)
+        .post(_url)
         .set(baseHeader)
         .end(function (err, ss) {
             if (err) {
@@ -316,12 +331,12 @@ schedule.scheduleJob(rule, function () {
                 return next(err);
             } else {
                 cb(null, ss.text);
-                console.log("成功一条",ss.text);
+                console.log(ss);
                 
             }
         })
     }
-    var headerArr = [baseheader,XDDDDbaseheader];
+    var headerArr = [mxd,wyd,yh];
     function res(num) {
         async.mapLimit(headerArr, num, function (item, callback) {
             requestUrl(item, callback)
@@ -331,12 +346,12 @@ schedule.scheduleJob(rule, function () {
                 sendmail("邮件内容：<br/>签到失败!"+new Date().toString())
             } else {
                 console.log("全部已爬取完毕！");
-                sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+ result)
+//                sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+ result)
             }
         });
     }
     setTimeout(function () {
-        res(2);
+        res(1);
     }, 5000)
     
     
@@ -386,7 +401,8 @@ schedule.scheduleJob(rule, function () {
 
 
 
-
+//hyhycx 
+//a123456
 
 
 //app.listen(3000, function(req, res) {

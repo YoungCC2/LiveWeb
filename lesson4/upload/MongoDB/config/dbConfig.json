@@ -1,0 +1,10 @@
+{
+ "host1" : "dds-bp1ca938e21dc0541137-pub.mongodb.rds.aliyuncs.com",
+ "port1" : 3717,
+ "host2" : "dds-bp1ca938e21dc0542938-pub.mongodb.rds.aliyuncs.com",
+ "port2" : 3717,
+ "username" : "root",
+ "password" : "-TTTyh743472220",
+ "replSetName" : "mgset-5043535",
+ "demoDb" : "admin"
+}

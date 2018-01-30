@@ -1,0 +1,23 @@
+{
+  "name": "mymongodb",
+  "version": "1.0.0",
+  "description": "test mongo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "yhhh",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.2",
+    "http": "^0.0.0",
+    "mongodb": "^3.0.1",
+    "mongoose": "^4.13.9",
+    "node-uuid": "^1.4.8",
+    "path": "^0.12.7",
+    "sprintf-js": "^1.1.1"
+  },
+  "dependencies": {
+    "mongolass": "^3.1.5"
+  }
+}

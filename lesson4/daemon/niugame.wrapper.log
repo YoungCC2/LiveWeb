@@ -1,0 +1,60 @@
+2017-11-30 17:55:07 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2017-11-30 17:55:07 - Started 18876
+2017-11-30 17:58:43 - Stopping niugame.exe
+2017-11-30 17:58:43 - ProcessKill 18876
+2017-11-30 17:58:43 - Found child process: 17712 Name: conhost.exe
+2017-11-30 17:58:43 - Found child process: 15612 Name: node.exe
+2017-11-30 17:58:43 - Stopping process 17712
+2017-11-30 17:58:43 - Send SIGINT 17712
+2017-11-30 17:58:43 - SIGINT to 17712 failed - Killing as fallback
+2017-11-30 17:58:43 - Stopping process 15612
+2017-11-30 17:58:43 - Send SIGINT 15612
+2017-11-30 17:58:43 - SIGINT to 15612 failed - Killing as fallback
+2017-11-30 17:58:43 - Stopping process 18876
+2017-11-30 17:58:43 - Send SIGINT 18876
+2017-11-30 17:58:43 - SIGINT to 18876 failed - Killing as fallback
+2017-11-30 17:58:43 - Finished niugame.exe
+2017-11-30 17:58:44 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2017-11-30 17:58:44 - Started 13392
+2017-11-30 18:01:23 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2017-11-30 18:01:23 - Started 18648
+2017-11-30 18:02:48 - Stopping niugame.exe
+2017-11-30 18:02:48 - ProcessKill 18648
+2017-11-30 18:02:48 - Found child process: 13896 Name: conhost.exe
+2017-11-30 18:02:48 - Found child process: 8112 Name: node.exe
+2017-11-30 18:02:48 - Stopping process 13896
+2017-11-30 18:02:48 - Send SIGINT 13896
+2017-11-30 18:02:48 - SIGINT to 13896 failed - Killing as fallback
+2017-11-30 18:02:48 - Stopping process 8112
+2017-11-30 18:02:48 - Send SIGINT 8112
+2017-11-30 18:02:48 - SIGINT to 8112 failed - Killing as fallback
+2017-11-30 18:02:48 - Stopping process 18648
+2017-11-30 18:02:48 - Send SIGINT 18648
+2017-11-30 18:02:48 - SIGINT to 18648 failed - Killing as fallback
+2017-11-30 18:02:48 - Finished niugame.exe
+2017-11-30 18:02:49 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2017-11-30 18:02:49 - Started 19860
+2017-11-30 18:04:20 - Stopping niugame.exe
+2017-11-30 18:04:20 - ProcessKill 19860
+2017-11-30 18:04:20 - Found child process: 5672 Name: conhost.exe
+2017-11-30 18:04:20 - Found child process: 14768 Name: node.exe
+2017-11-30 18:04:20 - Stopping process 5672
+2017-11-30 18:04:20 - Send SIGINT 5672
+2017-11-30 18:04:20 - SIGINT to 5672 failed - Killing as fallback
+2017-11-30 18:04:20 - Stopping process 14768
+2017-11-30 18:04:20 - Send SIGINT 14768
+2017-11-30 18:04:20 - SIGINT to 14768 failed - Killing as fallback
+2017-11-30 18:04:20 - Stopping process 19860
+2017-11-30 18:04:20 - Send SIGINT 19860
+2017-11-30 18:04:20 - SIGINT to 19860 failed - Killing as fallback
+2017-11-30 18:04:20 - Finished niugame.exe
+2017-12-29 15:05:26 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2017-12-29 15:05:27 - Started 5896
+2018-01-26 18:22:48 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2018-01-26 18:22:50 - Started 5464
+2018-01-27 16:28:36 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2018-01-27 16:28:37 - Started 5536
+2018-01-28 21:10:02 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2018-01-28 21:10:04 - Started 5440
+2018-01-29 09:47:23 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
+2018-01-29 09:47:25 - Started 5700
