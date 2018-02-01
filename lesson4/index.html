@@ -1,26 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
 </head>
+
 <body>
-    
+    <div style="width: 500px">
+        <video id="etVideo"></video>
+    </div>
+
     <script src="jquery-3.2.1.min.js"></script>
     <script type="application/javascript">
-        $.ajax({
-            url:'http://localhost:3000/mysql',
-            type:'POST',
-            data:{
-                "src":'http://www.baidu.com'
+        navigator.getUserMedia({
+                audio: true,
+                video: true
             },
-            success:function(res){
-                console.log(res);
+            function(stream) {
+
+                var rtVideo = document.getElementById("etVideo");
+
+                if (window.URL) {
+                    rtVideo.src = window.URL.createObjectURL(stream);
+                }
+                rtVideo.autoplay = true;
             },
-            error:function(err){
-                console.log(err);
-            }
-        })
+            function(err) {
+
+            });
     </script>
 </body>
+
 </html>

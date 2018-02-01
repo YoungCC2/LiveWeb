@@ -58,3 +58,17 @@
 2018-01-28 21:10:04 - Started 5440
 2018-01-29 09:47:23 - Starting C:\Program Files\nodejs\node.exe  --harmony D:\workspace\LiveWeb\lesson4\node_modules\node-windows\lib\wrapper.js --file D:\workspace\LiveWeb\lesson4\zhihu.js --log "NiuGame wrapper" --grow 0.25 --wait 1 --maxrestarts 3 --abortonerror n --stopparentfirst undefined
 2018-01-29 09:47:25 - Started 5700
+2018-01-31 11:19:03 - Stopping niugame.exe
+2018-01-31 11:19:03 - ProcessKill 5700
+2018-01-31 11:19:03 - Found child process: 5716 Name: conhost.exe
+2018-01-31 11:19:03 - Found child process: 6000 Name: node.exe
+2018-01-31 11:19:03 - Stopping process 5716
+2018-01-31 11:19:03 - Send SIGINT 5716
+2018-01-31 11:19:03 - SIGINT to 5716 failed - Killing as fallback
+2018-01-31 11:19:04 - Stopping process 6000
+2018-01-31 11:19:04 - Send SIGINT 6000
+2018-01-31 11:19:04 - SIGINT to 6000 failed - Killing as fallback
+2018-01-31 11:19:04 - Stopping process 5700
+2018-01-31 11:19:04 - Send SIGINT 5700
+2018-01-31 11:19:04 - SIGINT to 5700 failed - Killing as fallback
+2018-01-31 11:19:04 - Finished niugame.exe

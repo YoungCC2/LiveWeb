@@ -5,6 +5,9 @@ var indexRouter = require('./routers/indexRouter')
 var userRouter = require('./routers/userRouter')
 var birds = require('./birds');
 
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
+
 app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/birds', birds);
