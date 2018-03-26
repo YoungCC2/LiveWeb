@@ -12,6 +12,6 @@ app.use('/', indexRouter);
 app.use('/users', userRouter);
 app.use('/birds', birds);
 
-app.listen(3000, function(req, res) {
-    console.log('app is running at port 3000');
+app.listen(8083, function(req, res) {
+    console.log('app is running at port 8083');
 });

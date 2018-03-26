@@ -120,56 +120,30 @@ app.post('/test',function(req, res, next){
 })
 
 
-app.get('/nb',function(req,res,next){
+app.get('/nb', function (req, res, next) {
     open("https://www.niuplay.net/", "firefox"); //耀东
-    open("https://www.niuplay.net/", "chrome"); //晓东
-    var _url = 'https://www.niuplay.net/UserAjax/SignInDay?t=0.4781838105684555';
-    var baseheader = {
+//    open("https://www.niuplay.net/", "chrome"); //晓东
+//    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niuplay.net/");
+    const _url = 'https://www.niugamevip.com/UserAjax/SignInDay?t=0.23646105944909923';
+    const baseheader = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'PHPSESSID=19vq0gadf1te9mdmecp5m5j4o0; NIUGAME_think_language=zh-CN; _gat=1; NIUGAME_DIFUEIJSD=a49dcdf7dde74877a52e4659731fa631; _ga=GA1.2.84060275.1511506135; _gid=GA1.2.440742571.1511759961',
-        "Host": "www.niuplay.net",
-        "Pragma": "no-cache",
-        "Referer": 'https://www.niuplay.net/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+        "Content-Length":0,
+        "Cookie": 'NIUGAME_think_language=zh-CN; PHPSESSID=b0ruvpe4kv305bscrh4j55n8l4; __jsluid=ebf70adf57bd8ee3a982c699f4d543d5; _ga=GA1.2.170185592.1519866125; _gid=GA1.2.1624547938.1519866125; footScrollFlag=1; game_current_date=1519833600; game_current_type=0; game_current_show=date; game_current_game_type=12; NIUGAME_DIFUEIJSD=c83c922b823184591fb112abc43cde3c; _gat=1',
+        "Host": "www.niugamevip.com",
+        "Origin":"https://www.niugamevip.com",
+        "Referer": 'https://www.niugamevip.com/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
         "X-Requested-With": 'XMLHttpRequest'
     }
-    var XDDDDbaseheader = {
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
-        "Cookie": 'NIUGAME_think_language=zh-CN; PHPSESSID=m88r3u43f77133t7g8rvc89j85; _ga=GA1.2.1649831064.1512008753; _gid=GA1.2.1723359070.1512008753; _gat=1; NIUGAME_DIFUEIJSD=54de7f9457856b87f34233a83de37765',
-        "Host": "www.niuplay.net",
-        "Pragma": "no-cache",
-        "Referer": 'https://www.niuplay.net/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
-        "X-Requested-With": 'XMLHttpRequest'
-    }
-    var count = 0;
-    setTimeout(function(){
-        request
-        .get(_url)
-        .set(XDDDDbaseheader)
-        .end(function (err, ss) {
-            if (err) {
-                console.log('err');
-                return next(err);
-            } else {
-                count++;
-                console.log("耀东",count,ss.text);
-                if (count == 2) {
-                    res.send('所有请求完毕')
-                }
-            }
-        })
-    },5000)
-    setTimeout(function(){
-        request
+    //76659978
+    //921210
+
+
+    //l206xd   money514
+    request
         .get(_url)
         .set(baseheader)
         .end(function (err, ss) {
@@ -177,50 +151,38 @@ app.get('/nb',function(req,res,next){
                 console.log('err');
                 return next(err);
             } else {
-                count++;
-                console.log("晓东",count,ss.text);
-                if (count == 2) {
-                    res.send('所有请求完毕')
-                }
+                res.send(ss.text);
             }
         })
-    },5000)
-    
-    
 });
-app.get('/net',function(req,res,next){
-    var _url = 'http://music.163.com/weapi/point/dailyTask?csrf_token=2d3fc4aaf219f561b0b598c4bef8af97';
+app.get('/net', function (req, res, next) {
+    var _url = 'https://api.live.bilibili.com/sign/doSign';
     var baseheader = {
-        "Accept": "application/json, text/javascript, */*; q=0.01",
+        "Accept": "application/json, text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Content-Length":"410",
-        "Content-Type":"application/x-www-form-urlencoded",
-        "Cookie": 'JSESSIONID-WYYY=ml8%2Fb674N9DdP3xk%5Cp7fubW7IMdB18m2rvBwRPFqCzjgaMhhu4%5C3F%2FtkDHF9d3OJfSkTJR04Jta%2B7ttBzgDCBCWfn822Bhj51TSX8k3sJMNBfyGHA7BQxxSToVYTZ2gTwpBj%5CfZnTkitH7aa8a%2FyPdp4xZckGrwt4I0VnzcH8wdbAzpj%3A1511172962906; _iuqxldmzr_=32; _ntes_nnid=6fc3b1bb93daf2ea239a0f115276697f,1511171162937; _ntes_nuid=6fc3b1bb93daf2ea239a0f115276697f; __remember_me=true; MUSIC_U=93181d58e76bc8684b776ba7d9000ba337ec05c0e61b284fa5fad1e08ee7da7bec419a81eb06bd7eeb42834e2608436941049cea1c6bb9b6; __csrf=2d3fc4aaf219f561b0b598c4bef8af97; __utma=94650624.1121442284.1511171163.1511171163.1511171163.1; __utmb=94650624.6.10.1511171163; __utmc=94650624; __utmz=94650624.1511171163.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic',
-        "Host": "music.163.com",
-        "Origin":"http://music.163.com",
-        "Pragma":"no-cache",
-        "Referer":'http://music.163.com/discover',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+        "Cookie": 'finger=edc6ecda; fts=1519360114; sid=ic5ufy6e; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1521952123%2C2d10f50f; bili_jct=98d20bf1875063f93836ca94ef9c7a99; UM_distinctid=161c0ebc5c316a-0f31df4a90ace-4323461-1fa400-161c0ebc5c4b18; buvid3=4769E861-5BEE-4B3E-B83C-1CBCC2EF2E66139245infoc; pgv_pvi=6062997504; pgv_si=s2916012032; rpdid=ipommolppdosolkxwiww; LIVE_BUVID=1c429352234b809dbfac3c4e13239ca3; LIVE_BUVID__ckMd5=525c9f3bfa3a6cfe; _dfcaptcha=8aedbdd236facd954780c50f2edb04b9; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519449304,1519705823,1519878858,1519953635; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519953637',
+        "Host": "api.live.bilibili.com",
+        "Origin": "https://live.bilibili.com",
+        "Referer": 'https://live.bilibili.com/p/eden/area-tags',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
     }
 
-    var param = function(){
+    var param = function () {
         return {
-            params:'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
-            encSecKey:'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
+            params: 'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
+            encSecKey: 'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
         }
     }
     request
-        .post(_url)
+        .get(_url)
         .set(baseheader)
-        .send(param())
-        .end(function(err,sres){
-            if(err){
+        .end(function (err, sres) {
+            if (err) {
                 console.log('err');
                 return next(err);
-            }else{
+            } else {
                 res.send(sres.text)
             }
         })
@@ -273,54 +235,59 @@ var sendmail = function (html) {
     });
 }
 var rule = new schedule.RecurrenceRule();
-rule.hour =9;rule.minute =46;rule.second =0;
+rule.hour =0;rule.minute =0;rule.second =0;
 
 
 console.log(rule);
 schedule.scheduleJob(rule, function () {
-    open("https://www.niusport.net/", "firefox"); //耀东
-    open("https://www.niusport.net/", "chrome"); //晓东
-    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niusport.net/");
-    var _url = 'https://www.niusport.net/UserAjax/SignInDay?t=0.17865249360840885';
+    open("https://www.niuplay.net/", "firefox"); //耀东
+    open("https://www.niuplay.net/", "chrome"); //晓东
+    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niuplay.net/");
+    var _url = 'https://www.niugamevip.com/UserAjax/SignInDay?t=0.23646105944909923';
+    
     var mxd = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": 'PHPSESSID=9ttneb0571tc3pno8c3irmh8m0; __jsluid=38534c5e4a4f59a7b573983fb8939156; _ga=GA1.2.487547688.1516723206; _gid=GA1.2.1154735853.1516809606; NIUGAME_think_language=zh-CN; NIUGAME_DIFUEIJSD=5ed6d167f5d72ad5bd249834b52a7611; _gat=1',
-        "Host": "www.niuplay.net",
-        "Pragma": "no-cache",
-        "Referer": 'https://www.niuplay.net/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+        "Content-Length":0,
+        "Cookie": 'PHPSESSID=7b9etr7s941tabklim1h4vhop5; __jsluid=bd25db8cafc294ba1a34055e803a6ce4; _ga=GA1.2.193888620.1521163675; _gid=GA1.2.1642475297.1521163675; NIUGAME_DIFUEIJSD=e11c6446dac4721540296b3d2e76042d; NIUGAME_think_language=zh-CN; _gat=1',
+        "Host": "www.niusport.net",
+        "Origin":"https://www.niusport.net/",
+        "Referer": 'https://www.niusport.net/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
         "X-Requested-With": 'XMLHttpRequest'
     }
+    
     var wyd = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cache-Control": "no-cache",
+        "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
         "Connection": "keep-alive",
-        "Cookie": '__jsluid=4b14fb88f7ac0450aa54cf2dda341f6f; PHPSESSID=9o5bgodqug0m38g231v7rvrbh4; _ga=GA1.2.1251069339.1516723208; _gid=GA1.2.1941227369.1516809613; NIUGAME_think_language=zh-CN; NIUGAME_DIFUEIJSD=0dc649764a6aa289c34657dda4241fe7',
-        "Host": "www.niuplay.net",
-        "Pragma": "no-cache",
-        "Referer": 'https://www.niuplay.net/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36",
+        "Content-Length":0,
+        "Cache-Control":"max-age=0",
+        "Cookie": '__jsluid=4b14fb88f7ac0450aa54cf2dda341f6f; _ga=GA1.2.1251069339.1516723208; PHPSESSID=k9i8i1bvlc7v0v3qlb9dktpsh6; NIUGAME_think_language=zh-CN; NIUGAME_DIFUEIJSD=b007696f5ae1a5371166ffae34dd5d56',
+        "Host": "www.niusport.com",
+        "Origin":"https://www.niusport.com",
+        "Referer": 'https://www.niusport.com/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
         "X-Requested-With": 'XMLHttpRequest'
     }
+    
     var yh = {
         "Accept": "application/json, text/javascript, */*; q=0.01",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": '__jsluid=bd35f313e872947784c07e9964b188af; NIUGAME_DIFUEIJSD=06ac7dc604cc2bdcc2c613dacded36c5; PHPSESSID=bt0su11dm7r448oavasnf47st2; NIUGAME_think_language=zh-CN; _ga=GA1.2.1774454551.1516723211; _gid=GA1.2.1527420838.1516723211',
-        "Host": "www.niuplay.net",
-        "Pragma": "no-cache",
-        "Referer": 'https://www.niuplay.net/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36",
+        "Content-Length":0,
+        "Cookie": '__jsluid=bd35f313e872947784c07e9964b188af; NIUGAME_DIFUEIJSD=7d2d1158fb01325282970c5ff46345cf; PHPSESSID=oa8bm57eqt62lqbf415gajhg36; NIUGAME_think_language=zh-CN; _ga=GA1.2.1774454551.1516723211; _gid=GA1.2.1791224528.1521475207',
+        "Host": "www.niusport.net",
+        "Origin":"https://www.niusport.com",
+        "Referer": 'https://www.niusport.com/',
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
         "X-Requested-With": 'XMLHttpRequest'
     }
+    
     function requestUrl(baseHeader,cb){
         request
         .post(_url)
@@ -330,9 +297,8 @@ schedule.scheduleJob(rule, function () {
                 console.log('err');
                 return next(err);
             } else {
-                cb(null, ss.text);
-                console.log(ss);
-                
+                cb(null, ss.body);
+//                console.log(ss);
             }
         })
     }
@@ -346,7 +312,8 @@ schedule.scheduleJob(rule, function () {
                 sendmail("邮件内容：<br/>签到失败!"+new Date().toString())
             } else {
                 console.log("全部已爬取完毕！");
-//                sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+ result)
+//                console.log(result);
+                sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+ result)
             }
         });
     }
@@ -358,6 +325,7 @@ schedule.scheduleJob(rule, function () {
     
     
     ///////////////////////////////////////////////////
+    //网易云签到
     function netest() {
         var _url = 'http://music.163.com/weapi/point/dailyTask?csrf_token=2d3fc4aaf219f561b0b598c4bef8af97';
         var baseheader = {
@@ -395,7 +363,40 @@ schedule.scheduleJob(rule, function () {
                 }
             })
     }
-    
+    //B站签到
+    function bilibili() {
+        var _url = 'https://api.live.bilibili.com/sign/doSign';
+        var baseheader = {
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Connection": "keep-alive",
+            "Cookie": 'finger=edc6ecda; fts=1519360114; sid=ic5ufy6e; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1521952123%2C2d10f50f; bili_jct=98d20bf1875063f93836ca94ef9c7a99; UM_distinctid=161c0ebc5c316a-0f31df4a90ace-4323461-1fa400-161c0ebc5c4b18; buvid3=4769E861-5BEE-4B3E-B83C-1CBCC2EF2E66139245infoc; pgv_pvi=6062997504; pgv_si=s2916012032; rpdid=ipommolppdosolkxwiww; LIVE_BUVID=1c429352234b809dbfac3c4e13239ca3; LIVE_BUVID__ckMd5=525c9f3bfa3a6cfe; _dfcaptcha=8aedbdd236facd954780c50f2edb04b9; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519449304,1519705823,1519878858,1519953635; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519953637',
+            "Host": "api.live.bilibili.com",
+            "Origin": "https://live.bilibili.com",
+            "Referer": 'https://live.bilibili.com/p/eden/area-tags',
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+        }
+
+        var param = function () {
+            return {
+                params: 'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
+                encSecKey: 'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
+            }
+        }
+        request
+            .get(_url)
+            .set(baseheader)
+            .end(function (err, sres) {
+                if (err) {
+                    console.log('err');
+                    return next(err);
+                } else {
+                    console.log(sres.text)
+                }
+            })
+    }
+    bilibili();
     netest();
 });
 
