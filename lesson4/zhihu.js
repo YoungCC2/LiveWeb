@@ -108,15 +108,50 @@ app.get('/', function (req, res, next) {
 
 
 app.post('/test',function(req, res, next){
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header("Content-Type", "application/json;charset=utf-8");
-    console.log( 'ajax' , req.body );
-    var resp = {
-        "msg":'请求成功',
-        "id":"1",
-        "name":"req.body.name"
+//    res.header('Access-Control-Allow-Origin', '*');
+//    res.header("Content-Type", "application/json;charset=utf-8");
+//    console.log( 'ajax' , req.body );
+//    var resp = {
+//        "msg":'请求成功',
+//        "id":"1",
+//        "name":"req.body.name"
+//    }
+//    res.end(JSON.stringify(resp))  //回应浏览器
+        function bilibili() {
+        var _url = 'https://api.live.bilibili.com/sign/doSign';
+        var baseheader = {
+            "Accept": "application/json, text/plain, */*",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Connection": "keep-alive",
+            "Cookie": 'finger=edc6ecda; fts=1521076565; sid=ctficj3g; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1523668572%2Ccb84b363; bili_jct=fa1476c71cfcf1b5cf4f2bf7412394c4; LIVE_BUVID=2240be532c8b886839e4e35040a16aa0; LIVE_BUVID__ckMd5=418130b60c644a9b; buvid3=009790C3-ED29-43A2-8E1E-16BF3213CCEA25348infoc; _dfcaptcha=73874beeb5962f10c1125eccccf58789; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1521781059,1522124465,1522211472,1522285563; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1522285565',
+            "Host": "api.live.bilibili.com",
+            "Origin": "https://live.bilibili.com",
+            "Referer": 'https://live.bilibili.com/p/eden/area-tags',
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+        }
+
+        var param = function () {
+            return {
+                params: 'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
+                encSecKey: 'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
+            }
+        }
+        request
+            .get(_url)
+            .set(baseheader)
+            .end(function (err, sres) {
+                if (err) {
+                    console.log('err');
+                    return next(err);
+                } else {
+                    console.log(sres.text)
+                }
+            })
     }
-    res.end(JSON.stringify(resp))  //回应浏览器
+    
+    bilibili();
+    
 })
 
 
@@ -230,103 +265,19 @@ var sendmail = function (html) {
         if (error) {
             console.log("fail: " + error);
         } else {
-            console.log("success: " + response.messageID);
+//            console.log("success: " + response.messageID);
         }
     });
 }
 var rule = new schedule.RecurrenceRule();
-rule.hour =0;rule.minute =0;rule.second =0;
+rule.hour =9;rule.minute =13;rule.second =0;
 
 
 console.log(rule);
 schedule.scheduleJob(rule, function () {
-    open("https://www.niuplay.net/", "firefox"); //耀东
-    open("https://www.niuplay.net/", "chrome"); //晓东
-    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niuplay.net/");
-    var _url = 'https://www.niugamevip.com/UserAjax/SignInDay?t=0.23646105944909923';
-    
-    var mxd = {
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Connection": "keep-alive",
-        "Content-Length":0,
-        "Cookie": 'PHPSESSID=7b9etr7s941tabklim1h4vhop5; __jsluid=bd25db8cafc294ba1a34055e803a6ce4; _ga=GA1.2.193888620.1521163675; _gid=GA1.2.1642475297.1521163675; NIUGAME_DIFUEIJSD=e11c6446dac4721540296b3d2e76042d; NIUGAME_think_language=zh-CN; _gat=1',
-        "Host": "www.niusport.net",
-        "Origin":"https://www.niusport.net/",
-        "Referer": 'https://www.niusport.net/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
-        "X-Requested-With": 'XMLHttpRequest'
-    }
-    
-    var wyd = {
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
-        "Connection": "keep-alive",
-        "Content-Length":0,
-        "Cache-Control":"max-age=0",
-        "Cookie": '__jsluid=4b14fb88f7ac0450aa54cf2dda341f6f; _ga=GA1.2.1251069339.1516723208; PHPSESSID=k9i8i1bvlc7v0v3qlb9dktpsh6; NIUGAME_think_language=zh-CN; NIUGAME_DIFUEIJSD=b007696f5ae1a5371166ffae34dd5d56',
-        "Host": "www.niusport.com",
-        "Origin":"https://www.niusport.com",
-        "Referer": 'https://www.niusport.com/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
-        "X-Requested-With": 'XMLHttpRequest'
-    }
-    
-    var yh = {
-        "Accept": "application/json, text/javascript, */*; q=0.01",
-        "Accept-Encoding": "gzip, deflate, br",
-        "Accept-Language": "zh-CN,zh;q=0.9",
-        "Connection": "keep-alive",
-        "Content-Length":0,
-        "Cookie": '__jsluid=bd35f313e872947784c07e9964b188af; NIUGAME_DIFUEIJSD=7d2d1158fb01325282970c5ff46345cf; PHPSESSID=oa8bm57eqt62lqbf415gajhg36; NIUGAME_think_language=zh-CN; _ga=GA1.2.1774454551.1516723211; _gid=GA1.2.1791224528.1521475207',
-        "Host": "www.niusport.net",
-        "Origin":"https://www.niusport.com",
-        "Referer": 'https://www.niusport.com/',
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36",
-        "X-Requested-With": 'XMLHttpRequest'
-    }
-    
-    function requestUrl(baseHeader,cb){
-        request
-        .post(_url)
-        .set(baseHeader)
-        .end(function (err, ss) {
-            if (err) {
-                console.log('err');
-                return next(err);
-            } else {
-                cb(null, ss.body);
-//                console.log(ss);
-            }
-        })
-    }
-    var headerArr = [mxd,wyd,yh];
-    function res(num) {
-        async.mapLimit(headerArr, num, function (item, callback) {
-            requestUrl(item, callback)
-        },function(err,result){
-              if (err) {
-                console.log(err);
-                sendmail("邮件内容：<br/>签到失败!"+new Date().toString())
-            } else {
-                console.log("全部已爬取完毕！");
-//                console.log(result);
-                sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+ result)
-            }
-        });
-    }
-    setTimeout(function () {
-        res(1);
-    }, 5000)
-    
-    
-    
-    
-    ///////////////////////////////////////////////////
+//    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niuplay.net/");
     //网易云签到
-    function netest() {
+    function netest(callback) {
         var _url = 'http://music.163.com/weapi/point/dailyTask?csrf_token=2d3fc4aaf219f561b0b598c4bef8af97';
         var baseheader = {
             "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -357,47 +308,59 @@ schedule.scheduleJob(rule, function () {
             .end(function (err, sres) {
                 if (err) {
                     console.log('err');
+                    callback(null,"网易云签到失败")
                     return next(err);
                 } else {
-                    console.log(sres.text)
+                    callback(null,"网易云签到成功")
                 }
             })
     }
     //B站签到
-    function bilibili() {
+    function bilibili(callback) {
         var _url = 'https://api.live.bilibili.com/sign/doSign';
         var baseheader = {
             "Accept": "application/json, text/plain, */*",
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
             "Connection": "keep-alive",
-            "Cookie": 'finger=edc6ecda; fts=1519360114; sid=ic5ufy6e; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1521952123%2C2d10f50f; bili_jct=98d20bf1875063f93836ca94ef9c7a99; UM_distinctid=161c0ebc5c316a-0f31df4a90ace-4323461-1fa400-161c0ebc5c4b18; buvid3=4769E861-5BEE-4B3E-B83C-1CBCC2EF2E66139245infoc; pgv_pvi=6062997504; pgv_si=s2916012032; rpdid=ipommolppdosolkxwiww; LIVE_BUVID=1c429352234b809dbfac3c4e13239ca3; LIVE_BUVID__ckMd5=525c9f3bfa3a6cfe; _dfcaptcha=8aedbdd236facd954780c50f2edb04b9; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519449304,1519705823,1519878858,1519953635; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519953637',
+            "Cookie": 'finger=edc6ecda; fts=1521076565; sid=ctficj3g; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1523668572%2Ccb84b363; bili_jct=fa1476c71cfcf1b5cf4f2bf7412394c4; LIVE_BUVID=2240be532c8b886839e4e35040a16aa0; LIVE_BUVID__ckMd5=418130b60c644a9b; buvid3=009790C3-ED29-43A2-8E1E-16BF3213CCEA25348infoc; _dfcaptcha=73874beeb5962f10c1125eccccf58789; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1521781059,1522124465,1522211472,1522285563; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1522285565',
             "Host": "api.live.bilibili.com",
             "Origin": "https://live.bilibili.com",
             "Referer": 'https://live.bilibili.com/p/eden/area-tags',
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
         }
 
-        var param = function () {
-            return {
-                params: 'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
-                encSecKey: 'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
-            }
-        }
+
         request
             .get(_url)
             .set(baseheader)
             .end(function (err, sres) {
                 if (err) {
                     console.log('err');
+                    callback(null,"B站签到失败")
                     return next(err);
                 } else {
-                    console.log(sres.text)
+                    console.log(sres.text);
+                    callback(null,"B站签到成功")
+                    
                 }
             })
+        
+        
     }
-    bilibili();
-    netest();
+
+    async.series([netest, bilibili], (err, result) => {
+        if (err) {
+            console.log(err);
+        }
+        let str = '';
+        result.forEach((item)=>{
+            str = str + item + "<br/>";
+        });
+        console.log(str);
+        sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+str )
+    })
+    
 });
 
 
