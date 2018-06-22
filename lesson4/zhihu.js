@@ -224,8 +224,20 @@ app.get('/net', function (req, res, next) {
 
 })
 
-app.get('/down',function(){
-    res.send(filesss);
+app.get('/down',function(req, res, next){
+    res.header('Access-Control-Allow-Origin', '*');
+            request
+            .post("http://safone.iok.la:6666/image/webAsk")
+            .set({
+                'Content-Type': 'application/json;charset=UTF-8'
+            })
+            .send({
+          "askMessage":"1"
+        })
+            .end(function (err, sres) {
+                res.send(JSON.parse(sres.text))
+            })
+    
 })
 
 
@@ -247,9 +259,10 @@ rule支持设置的值有second,minute,hour,date,dayOfWeek,month,year
 var smtpConfig = {
     host: 'smtp.163.com',
     port: 465,
+    secure: true, 
     auth: {
         user: 'yh4063254@163.com',
-        pass: 'APTX4869'
+        pass: 'kryptonite4869'
     }
 };
 var transporter = nodemailer.createTransport(smtpConfig);
@@ -270,7 +283,9 @@ var sendmail = function (html) {
     });
 }
 var rule = new schedule.RecurrenceRule();
-rule.hour =9;rule.minute =13;rule.second =0;
+rule.hour =0;
+rule.minute =0;
+rule.second =0;
 
 
 console.log(rule);
@@ -308,10 +323,10 @@ schedule.scheduleJob(rule, function () {
             .end(function (err, sres) {
                 if (err) {
                     console.log('err');
-                    callback(null,"网易云签到失败")
+                    callback(null,"丁三石你大爷.签到失败109")
                     return next(err);
                 } else {
-                    callback(null,"网易云签到成功")
+                    callback(null,"丁三石你大爷.签到成功109"+JSON.stringify(sres.text))
                 }
             })
     }
@@ -323,7 +338,7 @@ schedule.scheduleJob(rule, function () {
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
             "Connection": "keep-alive",
-            "Cookie": 'finger=edc6ecda; fts=1521076565; sid=ctficj3g; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1523668572%2Ccb84b363; bili_jct=fa1476c71cfcf1b5cf4f2bf7412394c4; LIVE_BUVID=2240be532c8b886839e4e35040a16aa0; LIVE_BUVID__ckMd5=418130b60c644a9b; buvid3=009790C3-ED29-43A2-8E1E-16BF3213CCEA25348infoc; _dfcaptcha=73874beeb5962f10c1125eccccf58789; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1521781059,1522124465,1522211472,1522285563; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1522285565',
+            "Cookie": 'sid=4n7ask3x; LIVE_BUVID=16f64ca47333ec94b0e31eac1d687da8; LIVE_BUVID__ckMd5=5fcb1e582de43a7a; buvid3=0025210A-6337-4C60-B290-9FA8476A238E14579infoc; rpdid=kmkxpqkklkdosipiwoqpw; fts=1524632027; im_notify_type_3633494=0; UM_distinctid=1632989ac366f2-08da309a5bce35-f373567-1fa400-1632989ac3788b; LIVE_PLAYER_TYPE=2; bp_t_offset_3633494=128952098097933419; finger=edc6ecda; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1532138180%2C81c80f2f; bili_jct=6572afacc15ced0f1b4c714e52c85266; _dfcaptcha=fc4a08a78d0653a7700975d232716544; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1528262140,1528866543,1529546195,1529654413; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1529654420',
             "Host": "api.live.bilibili.com",
             "Origin": "https://live.bilibili.com",
             "Referer": 'https://live.bilibili.com/p/eden/area-tags',
@@ -337,11 +352,11 @@ schedule.scheduleJob(rule, function () {
             .end(function (err, sres) {
                 if (err) {
                     console.log('err');
-                    callback(null,"B站签到失败")
+                    callback(null,"死肥宅.签到失败109")
                     return next(err);
                 } else {
                     console.log(sres.text);
-                    callback(null,"B站签到成功")
+                    callback(null,"死肥宅签到成功109"+JSON.stringify(sres.text));
                     
                 }
             })

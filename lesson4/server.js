@@ -368,7 +368,7 @@ app.get('/mysql', function(req, res, next) {
         port: '3306',
         user: 'root',
         password: '123456',
-        database: 'world'
+        database: 'zjh'
     });
     //开始连接
     connection.connect(function(err) {
