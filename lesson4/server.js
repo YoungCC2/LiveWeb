@@ -557,6 +557,13 @@ app.get('/find', function (req, res, next) {
 //    console.log(arch);
 })
 
+
+app.post("/",(req,res,next)=>{
+    res.send({
+        port:"8888",
+        sc:"sc"
+    })
+})
 app.listen(8888, function(req, res) {
     console.log('app is running at port 8888');
 });
