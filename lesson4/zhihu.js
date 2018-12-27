@@ -42,7 +42,7 @@ app.use(session({
     store: new RedisStore({
         "host" : "47.98.132.175",
         "port" : 6379,
-        "pass" : "123qwe,./",
+        "pass" : "",
         // "db" : 1,
         "ttl" : 3600, //秒 3600秒 1小时
         "logErrors" : true
