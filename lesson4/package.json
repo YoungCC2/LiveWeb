@@ -27,14 +27,17 @@
   },
   "devDependencies": {
     "body-parser": "^1.18.3",
+    "connect-redis": "^3.4.0",
     "crypto": "^1.0.1",
     "events": "^3.0.0",
+    "express-session": "^1.15.6",
     "http-proxy-middleware": "^0.19.1",
     "md5": "^2.2.1",
     "net": "^1.0.2",
     "node-uuid": "^1.4.8",
     "os": "^0.1.1",
     "querystring": "^0.2.0",
+    "redis": "^2.8.0",
     "request": "^2.88.0"
   },
   "scripts": {

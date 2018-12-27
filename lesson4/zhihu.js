@@ -15,9 +15,21 @@ var schedule = require("node-schedule");
 var nodemailer = require('nodemailer');
 var child_process = require('child_process')
 var emitter = new events.EventEmitter()
-
+var redis = require("redis"),
+    client = redis.createClient({
+        "host" : "47.98.132.175",
+        "port" : 6379,
+        "password" : "123qwe,./"
+    });
 //setCookeie();
 //emitter.on("setCookeie", getTitles)            //监听setCookeie事件
+
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
+
+client.on("error", function (err) {
+    console.log("Error " + err);
+});
 
 
 app.use(bodyParser.urlencoded({
@@ -25,6 +37,38 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.text());
 app.use(bodyParser.json());
+
+app.use(session({
+    store: new RedisStore({
+        "host" : "47.98.132.175",
+        "port" : 6379,
+        "pass" : "123qwe,./",
+        // "db" : 1,
+        "ttl" : 3600, //秒 3600秒 1小时
+        "logErrors" : true
+     }),
+    secret: 'yh-',
+    resave: false
+}));
+
+
+
+//设置session
+app.post("/setSe",(req,res,next)=>{
+    client.set("foo_rand000000000000", "OK");
+    res.send("s");
+})
+
+//获取session
+app.get("/sc",(req,res,next)=>{
+    client.get("foo_rand000000000000", function (err, reply) {
+        console.log(reply.toString()); // Will print `OK`
+    });
+    res.send("sdsd");
+})
+
+
+
 app.get('/', function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     var _url = 'https://www.zhihu.com/api/v4/members/excited-vczh/answers';
@@ -289,94 +333,94 @@ rule.second =0;
 
 
 console.log(rule);
-schedule.scheduleJob(rule, function () {
-//    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niuplay.net/");
-    //网易云签到
-    function netest(callback) {
-        var _url = 'http://music.163.com/weapi/point/dailyTask?csrf_token=2d3fc4aaf219f561b0b598c4bef8af97';
-        var baseheader = {
-            "Accept": "application/json, text/javascript, */*; q=0.01",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-CN,zh;q=0.9",
-            "Cache-Control": "no-cache",
-            "Connection": "keep-alive",
-            "Content-Length": "410",
-            "Content-Type": "application/x-www-form-urlencoded",
-            "Cookie": 'JSESSIONID-WYYY=ml8%2Fb674N9DdP3xk%5Cp7fubW7IMdB18m2rvBwRPFqCzjgaMhhu4%5C3F%2FtkDHF9d3OJfSkTJR04Jta%2B7ttBzgDCBCWfn822Bhj51TSX8k3sJMNBfyGHA7BQxxSToVYTZ2gTwpBj%5CfZnTkitH7aa8a%2FyPdp4xZckGrwt4I0VnzcH8wdbAzpj%3A1511172962906; _iuqxldmzr_=32; _ntes_nnid=6fc3b1bb93daf2ea239a0f115276697f,1511171162937; _ntes_nuid=6fc3b1bb93daf2ea239a0f115276697f; __remember_me=true; MUSIC_U=93181d58e76bc8684b776ba7d9000ba337ec05c0e61b284fa5fad1e08ee7da7bec419a81eb06bd7eeb42834e2608436941049cea1c6bb9b6; __csrf=2d3fc4aaf219f561b0b598c4bef8af97; __utma=94650624.1121442284.1511171163.1511171163.1511171163.1; __utmb=94650624.6.10.1511171163; __utmc=94650624; __utmz=94650624.1511171163.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic',
-            "Host": "music.163.com",
-            "Origin": "http://music.163.com",
-            "Pragma": "no-cache",
-            "Referer": 'http://music.163.com/discover',
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-        }
+// schedule.scheduleJob(rule, function () {
+// //    child_process.exec("D:\\360Brower\\360Chrome\\Chrome\\Application\\360chrome.exe  https://www.niuplay.net/");
+//     //网易云签到
+//     function netest(callback) {
+//         var _url = 'http://music.163.com/weapi/point/dailyTask?csrf_token=2d3fc4aaf219f561b0b598c4bef8af97';
+//         var baseheader = {
+//             "Accept": "application/json, text/javascript, */*; q=0.01",
+//             "Accept-Encoding": "gzip, deflate, br",
+//             "Accept-Language": "zh-CN,zh;q=0.9",
+//             "Cache-Control": "no-cache",
+//             "Connection": "keep-alive",
+//             "Content-Length": "410",
+//             "Content-Type": "application/x-www-form-urlencoded",
+//             "Cookie": 'JSESSIONID-WYYY=ml8%2Fb674N9DdP3xk%5Cp7fubW7IMdB18m2rvBwRPFqCzjgaMhhu4%5C3F%2FtkDHF9d3OJfSkTJR04Jta%2B7ttBzgDCBCWfn822Bhj51TSX8k3sJMNBfyGHA7BQxxSToVYTZ2gTwpBj%5CfZnTkitH7aa8a%2FyPdp4xZckGrwt4I0VnzcH8wdbAzpj%3A1511172962906; _iuqxldmzr_=32; _ntes_nnid=6fc3b1bb93daf2ea239a0f115276697f,1511171162937; _ntes_nuid=6fc3b1bb93daf2ea239a0f115276697f; __remember_me=true; MUSIC_U=93181d58e76bc8684b776ba7d9000ba337ec05c0e61b284fa5fad1e08ee7da7bec419a81eb06bd7eeb42834e2608436941049cea1c6bb9b6; __csrf=2d3fc4aaf219f561b0b598c4bef8af97; __utma=94650624.1121442284.1511171163.1511171163.1511171163.1; __utmb=94650624.6.10.1511171163; __utmc=94650624; __utmz=94650624.1511171163.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic',
+//             "Host": "music.163.com",
+//             "Origin": "http://music.163.com",
+//             "Pragma": "no-cache",
+//             "Referer": 'http://music.163.com/discover',
+//             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+//         }
 
-        var param = function () {
-            return {
-                params: 'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
-                encSecKey: 'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
-            }
-        }
-        request
-            .post(_url)
-            .set(baseheader)
-            .send(param())
-            .end(function (err, sres) {
-                if (err) {
-                    console.log('err');
-                    callback(null,"丁三石你大爷.签到失败109")
-                    return next(err);
-                } else {
-                    callback(null,"丁三石你大爷.签到成功109"+JSON.stringify(sres.text))
-                }
-            })
-    }
-    //B站签到
-    function bilibili(callback) {
-        var _url = 'https://api.live.bilibili.com/sign/doSign';
-        var baseheader = {
-            "Accept": "application/json, text/plain, */*",
-            "Accept-Encoding": "gzip, deflate, br",
-            "Accept-Language": "zh-CN,zh;q=0.9",
-            "Connection": "keep-alive",
-            "Cookie": 'sid=4n7ask3x; LIVE_BUVID=16f64ca47333ec94b0e31eac1d687da8; LIVE_BUVID__ckMd5=5fcb1e582de43a7a; buvid3=0025210A-6337-4C60-B290-9FA8476A238E14579infoc; rpdid=kmkxpqkklkdosipiwoqpw; fts=1524632027; im_notify_type_3633494=0; UM_distinctid=1632989ac366f2-08da309a5bce35-f373567-1fa400-1632989ac3788b; LIVE_PLAYER_TYPE=2; bp_t_offset_3633494=128952098097933419; finger=edc6ecda; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1532138180%2C81c80f2f; bili_jct=6572afacc15ced0f1b4c714e52c85266; _dfcaptcha=fc4a08a78d0653a7700975d232716544; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1528262140,1528866543,1529546195,1529654413; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1529654420',
-            "Host": "api.live.bilibili.com",
-            "Origin": "https://live.bilibili.com",
-            "Referer": 'https://live.bilibili.com/p/eden/area-tags',
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
-        }
+//         var param = function () {
+//             return {
+//                 params: 'o50oV3MhU2SdBkeNVeIQoega9qP4BpjXGa+xeKB+1+tUxRSSPsQdpPoRSp1Sex46DijUsTKz9zTR7j/bakWFLmJiFTP3metIVmdbe7Za8U3dHa5HGyq07KRtAy6X6301',
+//                 encSecKey: 'b0945f2363118d1514723cf494c42ebee9e4f616c4b5851c63dc719b8e2aaf3aa620a1964d5cee60d2305fea35ea7d09a3a6f602ad61b8f133b8d486aac5abcaad33b70e4aa3f9c89dbcc9c170826cd17781356ec2c568238c15bfb0396c35f8eb17d5c9a911450035be471e0206472b2b4189977c08cb6c6ece745b3fe2ae23'
+//             }
+//         }
+//         request
+//             .post(_url)
+//             .set(baseheader)
+//             .send(param())
+//             .end(function (err, sres) {
+//                 if (err) {
+//                     console.log('err');
+//                     callback(null,"丁三石你大爷.签到失败109")
+//                     return next(err);
+//                 } else {
+//                     callback(null,"丁三石你大爷.签到成功109"+JSON.stringify(sres.text))
+//                 }
+//             })
+//     }
+//     //B站签到
+//     function bilibili(callback) {
+//         var _url = 'https://api.live.bilibili.com/sign/doSign';
+//         var baseheader = {
+//             "Accept": "application/json, text/plain, */*",
+//             "Accept-Encoding": "gzip, deflate, br",
+//             "Accept-Language": "zh-CN,zh;q=0.9",
+//             "Connection": "keep-alive",
+//             "Cookie": 'sid=4n7ask3x; LIVE_BUVID=16f64ca47333ec94b0e31eac1d687da8; LIVE_BUVID__ckMd5=5fcb1e582de43a7a; buvid3=0025210A-6337-4C60-B290-9FA8476A238E14579infoc; rpdid=kmkxpqkklkdosipiwoqpw; fts=1524632027; im_notify_type_3633494=0; UM_distinctid=1632989ac366f2-08da309a5bce35-f373567-1fa400-1632989ac3788b; LIVE_PLAYER_TYPE=2; bp_t_offset_3633494=128952098097933419; finger=edc6ecda; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1532138180%2C81c80f2f; bili_jct=6572afacc15ced0f1b4c714e52c85266; _dfcaptcha=fc4a08a78d0653a7700975d232716544; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1528262140,1528866543,1529546195,1529654413; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1529654420',
+//             "Host": "api.live.bilibili.com",
+//             "Origin": "https://live.bilibili.com",
+//             "Referer": 'https://live.bilibili.com/p/eden/area-tags',
+//             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36"
+//         }
 
 
-        request
-            .get(_url)
-            .set(baseheader)
-            .end(function (err, sres) {
-                if (err) {
-                    console.log('err');
-                    callback(null,"死肥宅.签到失败109")
-                    return next(err);
-                } else {
-                    console.log(sres.text);
-                    callback(null,"死肥宅签到成功109"+JSON.stringify(sres.text));
+//         request
+//             .get(_url)
+//             .set(baseheader)
+//             .end(function (err, sres) {
+//                 if (err) {
+//                     console.log('err');
+//                     callback(null,"死肥宅.签到失败109")
+//                     return next(err);
+//                 } else {
+//                     console.log(sres.text);
+//                     callback(null,"死肥宅签到成功109"+JSON.stringify(sres.text));
                     
-                }
-            })
+//                 }
+//             })
         
         
-    }
+//     }
 
-    async.series([netest, bilibili], (err, result) => {
-        if (err) {
-            console.log(err);
-        }
-        let str = '';
-        result.forEach((item)=>{
-            str = str + item + "<br/>";
-        });
-        console.log(str);
-        sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+str )
-    })
+//     async.series([netest, bilibili], (err, result) => {
+//         if (err) {
+//             console.log(err);
+//         }
+//         let str = '';
+//         result.forEach((item)=>{
+//             str = str + item + "<br/>";
+//         });
+//         console.log(str);
+//         sendmail("邮件内容：<br/>全部签到完毕!<hr/>" + new Date().toString() +"<hr/>"+str )
+//     })
     
-});
+// });
 
 
 
@@ -384,9 +428,9 @@ schedule.scheduleJob(rule, function () {
 //a123456
 
 
-//app.listen(3000, function(req, res) {
-//    console.log('app is running at port 3000');
-//});
+app.listen(3000, function(req, res) {
+   console.log('app is running at port 3000');
+});
 
 
 
