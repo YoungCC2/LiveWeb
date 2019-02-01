@@ -105,3 +105,8 @@ app.get("/wb",(req,res,next)=>{
 app.listen(9090, function (req, res) {
     console.log('app is running at port 9090');
 });
+
+
+/*wget --no-check-certificate -O shadowsocks.sh https://raw.githubusercontent.com/teddysun/shadowsocks_install/master/shadowsocks.sh 
+chmod +x shadowsocks.sh 
+./shadowsocks.sh 2>&1 | tee shadowsocks.log*/
