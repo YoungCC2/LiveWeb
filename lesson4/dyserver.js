@@ -6,7 +6,7 @@ var request = require('request');
 
 
 var HOST = '118.118.218.253';//
-var PORT = 8601; //8601,12602,12601,8602
+var PORT = 12602; //8601,12602,12601,8602
 
 
 var  roomid = "606118";
@@ -85,7 +85,7 @@ socket.on('data', function(data) {
         //            console.log('gid of room[' + roomid + '] is ' + gid)
         //            send(socket, 'type@=joingroup/rid@=' + 65962 + '/gid@=' + 2 + '/');
         //        });
-        send(socket, 'type@=joingroup/rid@=' + 246195 + '/gid@=' + -9999 + '/');
+        send(socket, 'type@=joingroup/rid@=' + 633019 + '/gid@=' + -9999 + '/');
     } else if (data.indexOf('type@=chatmsg') >= 0) {
         var msg = data.toString();
         var snick = msg.match(/nn@=(.*?)\//g)[0].replace('snick@=', '');
