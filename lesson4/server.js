@@ -368,7 +368,7 @@ app.get('/mysql', function(req, res, next) {
         port: '3306',
         user: 'root',
         password: '123456',
-        database: 'world'
+        database: 'zjh'
     });
     //开始连接
     connection.connect(function(err) {
@@ -557,6 +557,13 @@ app.get('/find', function (req, res, next) {
 //    console.log(arch);
 })
 
+
+app.post("/",(req,res,next)=>{
+    res.send({
+        port:"8888",
+        sc:"sc"
+    })
+})
 app.listen(8888, function(req, res) {
     console.log('app is running at port 8888');
 });

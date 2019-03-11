@@ -9,10 +9,12 @@
   "author": "yhyh",
   "license": "ISC",
   "devDependencies": {
+    "async": "^2.6.0",
     "body-parser": "^1.18.2",
     "cheerio": "^1.0.0-rc.2",
     "express": "^4.16.3",
     "fs": "^0.0.1-security",
+    "http": "^0.0.0",
     "path": "^0.12.7",
     "superagent": "^3.8.2"
   }

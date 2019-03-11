@@ -1,0 +1,7 @@
+{
+    "apps" : [{
+      "script"    : "zhihu.js",
+      "instances" : "max",
+      "exec_mode" : "cluster" 
+    }]
+  }
