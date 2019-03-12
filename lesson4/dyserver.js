@@ -9,7 +9,7 @@ var HOST = 'openbarrage.douyutv.com';//
 var PORT = 8601; //8601,12602,12601,8602
 
 
-var  rid = "9999";
+var  rid = "97376";
 var user = ""
 var password = "123456"
 
