@@ -6,7 +6,7 @@ var request = require('request');
 var gift = require("./dygift.json");
 var streamGift = require("./dyStream.json");
 var HOST = 'openbarrage.douyutv.com';//
-var PORT = 8601; //8601,12602,12601,8602
+var PORT = 12602; //8601,12602,12601,8602
 
 
 var  rid = "97376";
@@ -84,15 +84,19 @@ socket.on('data', function(data) {
         // getGroupId(rid, function (gid) {
         //     console.log('gid of room[' + rid + '] is ' + gid)
         //     send(socket, 'type@=joingroup/rid@=' + rid + '/gid@=' + 2 + '/');
-        // });
+        //        });
         send(socket, 'type@=joingroup/rid@=' + rid + '/gid@=' + -9999 + '/');
     } else if (data.indexOf('type@=chatmsg') >= 0) {
         var msg = data.toString();
-        // console.log(msg);
         var snick = msg.match(/nn@=(.*?)\//g)[0].replace('snick@=', '');
         var content = msg.match(/txt@=(.*?)\//g) ? msg.match(/txt@=(.*?)\//g)[0].replace('content@=', '')  : "error";
         snick = snick.substring(0, snick.length - 1);
         content = content.substring(0, content.length - 1);
+        if(content=="txt@=#121"){
+            console.log("===");
+            console.log(msg);
+            console.log("===");
+        }
         console.log(snick + ': ' + content); // 弹幕
     } else if (data.indexOf('type@=uenter') >= 0 ||
         //用户进入消息
@@ -108,7 +112,7 @@ socket.on('data', function(data) {
         //礼物广播消息
         var drid = data.toString().match(/drid@=(.*?)\//g)[0].replace('drid@=', '');
         drid = drid.substring(0, drid.length - 1);
-        console.log('rocket! room id:' + drid);
+        // console.log('rocket! room id:' + drid);
     } else if(data.indexOf('type@=dgb') >= 0){
         //当前房间礼物消息
         var msg = data.toString();
@@ -117,24 +121,23 @@ socket.on('data', function(data) {
         var gfcnt = msg.match(/gfcnt@=(.*?)\//g)[0].replace('gfcnt@=', '');
         gfid = gfid.substring(0, gfid.length - 1);
         
-        try{
-            gift["data"][gfid]["name"] ? 
-            console.log(`${snick}：送出 ${gift["data"][gfid]["name"]} -- ${gfcnt} 个`):
-            console.log(`${snick}：送出 ${streamGift["gift"][gfid]["name"]} -- ${gfcnt} 个`);
-        }catch(e){
-            console.log(`---${gfid}----`);
-            
-        }
+        // try{
+        //     gift["data"][gfid]["name"] ? 
+        //     console.log(`${snick}：送出 ${gift["data"][gfid]["name"]} -- ${gfcnt} 个`):
+        //     console.log(`${snick}：送出 ${streamGift["gift"][gfid]["name"]} -- ${gfcnt} 个`);
+        // }catch(e){
+        //     console.log(`---${gfid}----`);
+        // }
     }else if(data.indexOf('type@=bc_buy_deserve') >= 0){
         //当前放假酬勤消息
-        console.log(data.toString());
+        // console.log(data.toString());
     }else if(data.indexOf('type@=rss') >= 0){
         //当前房间直播状态
-        console.log(data.toString());
         var ss = msg.match(/ss@=(.*?)\//g)[0].replace('ss@=', '') == 0 ?"没有直播":"正在直播";
         var endtime = msg.match(/endtime@=(.*?)\//g)[0].replace('endtime@=', '') == 0 ?"没有直播":"正在直播";
-        console.log(`房间直播状态-${ss}-关播时间：${endtime}`);
-    }else{
+        // console.log(`房间直播状态-${ss}-关播时间：${endtime}`);
+    } else if(data.indexOf('id@=174393822') >= 0){
+        console.log(data.toString());
 //        console.log("1"); //在这里显示其它类型的消息
     }
 })
