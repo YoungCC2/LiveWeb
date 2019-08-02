@@ -9,7 +9,7 @@ var HOST = 'openbarrage.douyutv.com';//
 var PORT = 12602; //8601,12602,12601,8602
 
 
-var  rid = "97376";
+var  rid = "74960";
 var user = ""
 var password = "123456"
 
@@ -112,7 +112,7 @@ socket.on('data', function(data) {
         //礼物广播消息
         var drid = data.toString().match(/drid@=(.*?)\//g)[0].replace('drid@=', '');
         drid = drid.substring(0, drid.length - 1);
-        // console.log('rocket! room id:' + drid);
+        console.log('rocket! room id:' + drid);
     } else if(data.indexOf('type@=dgb') >= 0){
         //当前房间礼物消息
         var msg = data.toString();
@@ -121,13 +121,13 @@ socket.on('data', function(data) {
         var gfcnt = msg.match(/gfcnt@=(.*?)\//g)[0].replace('gfcnt@=', '');
         gfid = gfid.substring(0, gfid.length - 1);
         
-        // try{
-        //     gift["data"][gfid]["name"] ? 
-        //     console.log(`${snick}：送出 ${gift["data"][gfid]["name"]} -- ${gfcnt} 个`):
-        //     console.log(`${snick}：送出 ${streamGift["gift"][gfid]["name"]} -- ${gfcnt} 个`);
-        // }catch(e){
-        //     console.log(`---${gfid}----`);
-        // }
+        try{
+            gift["data"][gfid]["name"] ? 
+            console.log(`${snick}：送出 ${gift["data"][gfid]["name"]} -- ${gfcnt} 个`):
+            console.log(`${snick}：送出 ${streamGift["gift"][gfid]["name"]} -- ${gfcnt} 个`);
+        }catch(e){
+            console.log(`---${gfid}----`);
+        }
     }else if(data.indexOf('type@=bc_buy_deserve') >= 0){
         //当前放假酬勤消息
         // console.log(data.toString());
@@ -135,8 +135,8 @@ socket.on('data', function(data) {
         //当前房间直播状态
         var ss = msg.match(/ss@=(.*?)\//g)[0].replace('ss@=', '') == 0 ?"没有直播":"正在直播";
         var endtime = msg.match(/endtime@=(.*?)\//g)[0].replace('endtime@=', '') == 0 ?"没有直播":"正在直播";
-        // console.log(`房间直播状态-${ss}-关播时间：${endtime}`);
-    } else if(data.indexOf('id@=174393822') >= 0){
+        console.log(`房间直播状态-${ss}-关播时间：${endtime}`);
+    } else {
         console.log(data.toString());
 //        console.log("1"); //在这里显示其它类型的消息
     }
