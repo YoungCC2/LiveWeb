@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var proxy = require('http-proxy-middleware');
+var { createProxyMiddleware } = require('http-proxy-middleware');
 var app = express();
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
@@ -11,7 +11,7 @@ var options = {
     changeOrigin: false,               // 需要虚拟主机站点
 };
 
-var exampleProxy = proxy(options);
+var exampleProxy = createProxyMiddleware(options);
 app.use('/', exampleProxy);
 
 app.post("/sc",(req,res,next)=>{
