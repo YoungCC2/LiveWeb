@@ -1,5 +1,4 @@
 var request = require('superagent');
-var est = require("request");
 var express = require('express');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
@@ -34,7 +33,8 @@ app.use(bodyParser.json());
 //        Connection: "keep-alive",
 //        'Content-Length': 134,
 //        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-//        Cookie: 'q_c1=62d5f26ce2fd4e5e8a38704aec45b8e9|1503283193000|1503283193000; d_c0="AICCkPW9QAyPTknAeJGK5-IE4OZpCufkBro=|1503283194"; _zap=c1a8d9a4-740c-47a5-8148-0fd79ab26673; _ga=GA1.2.689365114.1504495941; _gid=GA1.2.1908057380.1504690297; aliyungf_tc=AQAAAG+HfQKeagwAHqZVfXMIa12cSy8R; _xsrf=8273a28f-ebe9-4c36-bf93-1c60bb68b7fb; cap_id="MzRjOGM3OTM2MmE4NDQ1ZTk3Y2UyNzgwODIzNDUwMDU=|1504748488|0fd04130dc7fc89e2de20406d6ca05f2f21e3d79"; l_cap_id="MzkyN2ZmNDA0MDVkNDgyMThiZjU4ZGM5NGE5ZTk4MjU=|1504748488|0f2a2722dfa96076bc2defe8fbd02ad4b48c8298"; __utma=51854390.689365114.1504495941.1504690239.1504747604.6; __utmb=51854390.0.10.1504747604; __utmc=51854390; __utmz=51854390.1504747604.6.6.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.000--|2=registration_date=20130507=1^3=entry_date=20170821=1',
+
+// Authentication headers must be supplied through environment variables.
 //        Host: 'www.zhihu.com',
 //        Origin: 'https://www.zhihu.com',
 //        Pragma: 'no-cache',
@@ -44,12 +44,7 @@ app.use(bodyParser.json());
 //        'X-Xsrftoken': '8273a28f-ebe9-4c36-bf93-1c60bb68b7fb'
 //    }
 //
-//    var data = {
-//        "_xsrf": "38323733613238662d656265392d346333362d626639332d316336306262363862376662",
-//        "password": "APTX4869",
-//        "captcha_type": 'cn',
-//        "phone_num": '18380441425'
-//    }
+//    Authentication data must be supplied through environment variables.
 //    request
 //        .post('https://www.zhihu.com/login/phone_num')
 //        .set(base_headers)
@@ -70,11 +65,11 @@ app.use(bodyParser.json());
 
 app.get('/home', function(req, res, next) {
     var connection = mysql.createConnection({
-        host: 'localhost',
-        port: '3306',
-        user: 'root',
-        password: '123456',
-        database: 'world'
+        host: process.env.MYSQL_HOST || '127.0.0.1',
+        port: Number(process.env.MYSQL_PORT || 3306),
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE || 'world'
     });
     var base_header = {
         Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
@@ -82,7 +77,7 @@ app.get('/home', function(req, res, next) {
         'Accept-Language': 'zh-CN,zh;q=0.8',
         'Connection': 'keep-alive',
         'Cache-Control': 'max-age=0',
-        Cookie: 'SINAGLOBAL=3025813996998.969.1503034766074; wb_cmtLike_1662736405=1; wvr=6; UOR=,,www.happyge.com; YF-Ugrow-G0=1eba44dbebf62c27ae66e16d40e02964; SSOLoginState=1505269772; YF-V5-G0=d45b2deaf680307fa1ec077ca90627d1; _s_tentry=-; Apache=610506355751.2435.1505269776456; ULV=1505269776633:13:13:5:610506355751.2435.1505269776456:1505264517861; YF-Page-G0=c47452adc667e76a7435512bb2f774f3; SCF=Ap9KrOm1nN4UNPRFCDcI0uu4l8uHK5gkmMcqozyNrehN0PMMOElI-yXXz07wkAUSPuEjtzPscJeJMDdzLsNFo2g.; SUB=_2A250vM12DeRhGedI7VAW8yjIyzmIHXVXy7m-rDV8PUJbmtBeLVjAkW8B1_X8l5RyIIxC3lg1e6nyMC2GCQ..; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9W5WyNw0a83_.-6ZDQivLDSl5JpX5o2p5NHD95QpSoqES0ecSh5fWs4DqcjUxsvfqJpLi--Xi-zRi-zcggvfdJMLxKnL1hnLB-2t; SUHB=06ZEuseM4UYGBU; ALF=1536805772; wb_cusLike_1662736405=N',
+        Cookie: process.env.WEIBO_COOKIE || "",
         Host: 'weibo.com',
         'Upgrade-Insecure-Requests': 1,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'
@@ -253,7 +248,7 @@ app.get('/img', function(req, res, next) {
             'Accept-Language': 'zh-CN,zh;q=0.8',
             'Cache-Control': 'no-cache',
             Connection: 'keep-alive',
-            Cookie: 'q_c1=f17d446552694d5fbbf0af2ab7619a0a|1504753247000|1504753247000; d_c0="AJBCKcWlVgyPTvVdkjkV8YLnZgvgvUcZpSE=|1504753248"; _zap=d719f1f5-26c3-4d96-94a0-b4c90e5c8859; r_cap_id="NjhlNWYzNDgwMWZiNDJlNGJkNGNkZDBhNTgwNjEzNmI=|1504753993|0e70a70a135f80b938a4f5c5b1302becefcaeefc"; cap_id="ZTBhOGI3NjZkYzIyNGY1YzgxYTVlNjhhOTFkMDkwY2M=|1504753993|79abac452198f777371b1c977310c7288d113c78"; z_c0=Mi4xYzhZTEFBQUFBQUFBa0VJcHhhVldEQmNBQUFCaEFsVk5UMGpZV1FDRWRKajUzZlhjRV9fZjlIcFNuSUtMa3NOcTFR|1504754511|065c87cce59c0589bcbffd22c14cef97450d09f1; __utma=51854390.1519459293.1504753249.1504850713.1504852601.9; __utmz=51854390.1504852601.9.8.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/collections; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1; aliyungf_tc=AQAAAGAU5E7QEw0An6RVfZD0T2fxpHYy; _xsrf=5c4e6162-1a6c-4104-83e9-9838adbbf26d',
+            Cookie: process.env.ZHIHU_COOKIE || "",
             Host: 'www.zhihu.com',
             Pragma: 'no-cache',
             'Upgrade-Insecure-Requests': 1,
@@ -364,11 +359,11 @@ app.get('/downloadImg', function(req, res, next) {
 app.get('/mysql', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     var connection = mysql.createConnection({
-        host: 'localhost',
-        port: '3306',
-        user: 'root',
-        password: '123456',
-        database: 'zjh'
+        host: process.env.MYSQL_HOST || '127.0.0.1',
+        port: Number(process.env.MYSQL_PORT || 3306),
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.ZHIHU_MYSQL_DATABASE || 'zjh'
     });
     //开始连接
     connection.connect(function(err) {
@@ -431,18 +426,19 @@ app.get('/asyncs', function(req, res, next) {
 
 app.get('/email',function(req,res,next){
     var smtpConfig = {
-        host: 'smtp.163.com',
-        port: 465,
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT || 465),
+        secure: process.env.SMTP_SECURE !== 'false',
         auth: {
-            user: 'yh4063254@163.com',
-            pass: 'APTX4869'
+            user: process.env.SMTP_USER,
+            pass: process.env.SMTP_PASSWORD
         }
     };
     var transporter =  nodemailer.createTransport(smtpConfig);
     var sendmail = function (html) {
         var option = {
-            from: "yh4063254@163.com",
-            to: "743472220@qq.com",
+            from: process.env.MAIL_FROM || process.env.SMTP_USER,
+            to: process.env.MAIL_TO,
             subject: '来自node的邮件',
             html: html,
             attachments:[

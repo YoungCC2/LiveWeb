@@ -1,5 +1,4 @@
 var request = require('superagent');
-var est = require("request");
 var express = require('express');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
@@ -25,7 +24,7 @@ app.get('/', function (req, res, next) {
                 "Accept-Language": "zh-CN,zh;q=0.8",
                 "Cache-Control": "no-cache",
                 "Connection": "keep-alive",
-                "Cookie": "_ntes_nnid=d6602ef81eec30b3630b256fdbf36e8b,1505810873434; _ntes_nuid=d6602ef81eec30b3630b256fdbf36e8b; vjuids=-6320a175d.15ebbdf62d0.0.1b3d6495baabc; mail_psc_fingerprint=68054eae0e444f652908b516e3b8db2d; P_INFO=yh4063254@163.com|1506563011|2|mail163|11&13|chq&1506390550&mail163#chq&null#10#0#0|187670&0|mail163|yh4063254@163.com; vjlast=1506390533.1509082860.11; vinfo_n_f_l_n3=f8954d276ba7c552.1.2.1508129441279.1508132464873.1509082894466; playerid=20437561; JSESSIONID-WYYY=pB%2Bjt5xlbWr%2FKdra2zzxIlrDd16J8XEyejpWsWMwrP2OoK2ditRlljrNT57YPOtZ3IiasduM5jHOQ0Z%2FNXdTx1RTg6Qkt6biI18D%2BYFwDjgYtI50taU4R3v%2BZokK%2B69Ah7Ou8Bucn02ipzoztlKPvZ2g6VOy10wKBRe4%2B8Okc%2BzZvgqS%3A1509700976970; _iuqxldmzr_=32; MUSIC_U=93181d58e76bc868a4b8cc6a8ad2eefa858834c2013acb3cb96d327fbf2040bac008d05d163e04f335c7deb169ee8b8aa70b41177f9edcea; __remember_me=true; __csrf=226a8629e7ebe410fa8b7ee4dcc33d5d; __utma=94650624.1882214727.1505810874.1509695697.1509699322.11; __utmb=94650624.4.10.1509699322; __utmc=94650624; __utmz=94650624.1509695697.10.8.utmcsr=baidu|utmccn=(organic)|utmcmd=organic",
+                "Cookie": process.env.NETEASE_MUSIC_COOKIE || "",
                 "Host": "music.163.com",
                 "Pragma": "no-cache",
                 "Referer": "http://music.163.com/",

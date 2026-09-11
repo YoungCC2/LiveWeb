@@ -9,7 +9,7 @@ var path = require("path");
 var {fileType} = require("./fileType");
 var staticToolDb = require("./MongoDB/toolDb/staticToolDb");
 var soundsToolDb = require("./MongoDB/toolDb/soundsToolDb");
-var uuid = require('node-uuid');  
+var { v4: uuidv4 } = require('uuid');
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -105,7 +105,7 @@ app.post('/find', function (req, res, next) {
         "Referer": "http://www.xfyun.cn/services/online_tts",
         "Accept-Encoding": "gzip, deflate",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cookie": "token=null; account_id=null; pgv_pvi=3904091136; pgv_si=s3691503616; SESSION=fd8751b8-7d67-43be-8973-03090452316e; Hm_lvt_83a57cc9e205b0add91afc6c4f0babcc=1515588364,1515588379; Hm_lpvt_83a57cc9e205b0add91afc6c4f0babcc=1515588379"
+        "Cookie": process.env.LEGACY_UPLOAD_COOKIE || ""
     }
 
     var text = req.body;
@@ -145,7 +145,7 @@ app.post('/find', function (req, res, next) {
 app.post('/sounds',function(req,res,next){
     res.header('Access-Control-Allow-Origin', '*');
     var insData = req.body;
-    insData["uuid"] = uuid.v4();
+    insData["uuid"] = uuidv4();
     soundsToolDb.insertData(insData).save().then(()=>{
         res.send({
             message:"success",

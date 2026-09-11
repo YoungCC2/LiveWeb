@@ -1,5 +1,4 @@
 var request = require('superagent');
-var est = require("request");
 var express = require('express');
 var cheerio = require('cheerio');
 var eventproxy = require('eventproxy');
@@ -15,20 +14,21 @@ var schedule = require("node-schedule");
 var nodemailer = require('nodemailer');
 var child_process = require('child_process')
 var emitter = new events.EventEmitter()
-var redis = require("redis"),
-    client = redis.createClient({
-        "host" : "47.98.132.175",
-        "port" : 6379,
-        "password" : "123qwe,./"
-    });
+var { createClient } = require("redis");
+var client = createClient({
+    url: process.env.REDIS_URL || 'redis://127.0.0.1:6379/0'
+});
 //setCookeie();
 //emitter.on("setCookeie", getTitles)            //监听setCookeie事件
 
 var session = require('express-session');
-var RedisStore = require('connect-redis')(session);
+var { RedisStore } = require('connect-redis');
 
 client.on("error", function (err) {
     console.log("Error " + err);
+});
+client.connect().catch(function (err) {
+    console.log("Redis connection error " + err);
 });
 
 
@@ -38,17 +38,18 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.text());
 app.use(bodyParser.json());
 
+if (!process.env.SESSION_SECRET) {
+    throw new Error('SESSION_SECRET is required');
+}
+
 app.use(session({
     store: new RedisStore({
-        "host" : "47.98.132.175",
-        "port" : 6379,
-        "pass" : "",
-        // "db" : 1,
+        client: client,
         "ttl" : 3600, //秒 3600秒 1小时
-        "logErrors" : true
      }),
-    secret: 'yh-',
-    resave: false
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
 }));
 
 
@@ -76,10 +77,10 @@ app.get('/', function (req, res, next) {
         "Accept": "application/json, text/plain, */*",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.8",
-        "authorization":"Bearer Mi4xYzhZTEFBQUFBQUFBUU1LN1k1cG5EQmNBQUFCaEFsVk44dnpXV2dBMlNtelRWR1E0dTcycmt0N0tfeklONUFLRVB3|1508486898|e8955da2622f0a316c412061a10a824933e2a98c",
+        "authorization": process.env.ZHIHU_AUTHORIZATION || "",
         "Cache-Control": "no-cache",
         "Connection": "keep-alive",
-        "Cookie": '_zap=1d25596d-92d8-4c50-ab58-bebcb79e4fe1; q_c1=5dd9c07d1d8544dab377e6eca1a91f5c|1505876343000|1505876343000; d_c0="AEDCu2OaZwyPTkFdLWgkHyfNqqT7-RRU2QU=|1505891115"; _ga=GA1.2.1072563680.1506499063; r_cap_id="YWRmYjJiNzFiZjk5NGQ3MWEyOWFhYjM2ZDBjYzdiMDY=|1508486891|a87cc7ed481727ffc0432438640a3e959cfce64d"; cap_id="MWI5ZjA3NGJiNmE0NGIzN2I0NGEyYTI3MWY3MTllMzE=|1508486891|fbeb5bdbb0ee0107457fcd4ef3924ac6894d6973"; z_c0=Mi4xYzhZTEFBQUFBQUFBUU1LN1k1cG5EQmNBQUFCaEFsVk44dnpXV2dBMlNtelRWR1E0dTcycmt0N0tfeklONUFLRVB3|1508486898|e8955da2622f0a316c412061a10a824933e2a98c; q_c1=5dd9c07d1d8544dab377e6eca1a91f5c|1508737686000|1505876343000; __utma=51854390.1072563680.1506499063.1509949933.1510020512.12; __utmz=51854390.1510020512.12.10.utmcsr=zhihu.com|utmccn=(referral)|utmcmd=referral|utmcct=/; __utmv=51854390.100-1|2=registration_date=20130507=1^3=entry_date=20130507=1; aliyungf_tc=AQAAAH7tCS/D5AEAlV5pDvKHYlSPZmx/; _xsrf=bde6f296-e4c5-4665-938b-488cdf20fb55',
+        "Cookie": process.env.ZHIHU_COOKIE || "",
         "Host": "www.zhihu.com",
         "Pragma":"no-cache",
         "Referer":'https://www.zhihu.com/people/excited-vczh/answers?page=2',
@@ -168,7 +169,7 @@ app.post('/test',function(req, res, next){
             "Accept-Encoding": "gzip, deflate, br",
             "Accept-Language": "zh-CN,zh;q=0.9",
             "Connection": "keep-alive",
-            "Cookie": 'finger=edc6ecda; fts=1521076565; sid=ctficj3g; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1523668572%2Ccb84b363; bili_jct=fa1476c71cfcf1b5cf4f2bf7412394c4; LIVE_BUVID=2240be532c8b886839e4e35040a16aa0; LIVE_BUVID__ckMd5=418130b60c644a9b; buvid3=009790C3-ED29-43A2-8E1E-16BF3213CCEA25348infoc; _dfcaptcha=73874beeb5962f10c1125eccccf58789; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1521781059,1522124465,1522211472,1522285563; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1522285565',
+            "Cookie": process.env.BILIBILI_COOKIE || "",
             "Host": "api.live.bilibili.com",
             "Origin": "https://live.bilibili.com",
             "Referer": 'https://live.bilibili.com/p/eden/area-tags',
@@ -210,7 +211,7 @@ app.get('/nb', function (req, res, next) {
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Connection": "keep-alive",
         "Content-Length":0,
-        "Cookie": 'NIUGAME_think_language=zh-CN; PHPSESSID=b0ruvpe4kv305bscrh4j55n8l4; __jsluid=ebf70adf57bd8ee3a982c699f4d543d5; _ga=GA1.2.170185592.1519866125; _gid=GA1.2.1624547938.1519866125; footScrollFlag=1; game_current_date=1519833600; game_current_type=0; game_current_show=date; game_current_game_type=12; NIUGAME_DIFUEIJSD=c83c922b823184591fb112abc43cde3c; _gat=1',
+        "Cookie": process.env.NIUGAME_COOKIE || "",
         "Host": "www.niugamevip.com",
         "Origin":"https://www.niugamevip.com",
         "Referer": 'https://www.niugamevip.com/',
@@ -241,7 +242,7 @@ app.get('/net', function (req, res, next) {
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
         "Connection": "keep-alive",
-        "Cookie": 'finger=edc6ecda; fts=1519360114; sid=ic5ufy6e; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1521952123%2C2d10f50f; bili_jct=98d20bf1875063f93836ca94ef9c7a99; UM_distinctid=161c0ebc5c316a-0f31df4a90ace-4323461-1fa400-161c0ebc5c4b18; buvid3=4769E861-5BEE-4B3E-B83C-1CBCC2EF2E66139245infoc; pgv_pvi=6062997504; pgv_si=s2916012032; rpdid=ipommolppdosolkxwiww; LIVE_BUVID=1c429352234b809dbfac3c4e13239ca3; LIVE_BUVID__ckMd5=525c9f3bfa3a6cfe; _dfcaptcha=8aedbdd236facd954780c50f2edb04b9; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519449304,1519705823,1519878858,1519953635; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519953637',
+        "Cookie": process.env.BILIBILI_COOKIE || "",
         "Host": "api.live.bilibili.com",
         "Origin": "https://live.bilibili.com",
         "Referer": 'https://live.bilibili.com/p/eden/area-tags',
@@ -301,19 +302,19 @@ rule支持设置的值有second,minute,hour,date,dayOfWeek,month,year
 
 
 var smtpConfig = {
-    host: 'smtp.163.com',
-    port: 465,
-    secure: true, 
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 465),
+    secure: process.env.SMTP_SECURE !== 'false',
     auth: {
-        user: 'yh4063254@163.com',
-        pass: 'kryptonite4869'
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASSWORD
     }
 };
 var transporter = nodemailer.createTransport(smtpConfig);
 var sendmail = function (html) {
     var option = {
-        from: "yh4063254@163.com",
-        to: "743472220@qq.com",
+        from: process.env.MAIL_FROM || process.env.SMTP_USER,
+        to: process.env.MAIL_TO,
         subject: '来自node的邮件',
         html: html,
         attachments: []
@@ -346,7 +347,8 @@ console.log(rule);
 //             "Connection": "keep-alive",
 //             "Content-Length": "410",
 //             "Content-Type": "application/x-www-form-urlencoded",
-//             "Cookie": 'JSESSIONID-WYYY=ml8%2Fb674N9DdP3xk%5Cp7fubW7IMdB18m2rvBwRPFqCzjgaMhhu4%5C3F%2FtkDHF9d3OJfSkTJR04Jta%2B7ttBzgDCBCWfn822Bhj51TSX8k3sJMNBfyGHA7BQxxSToVYTZ2gTwpBj%5CfZnTkitH7aa8a%2FyPdp4xZckGrwt4I0VnzcH8wdbAzpj%3A1511172962906; _iuqxldmzr_=32; _ntes_nnid=6fc3b1bb93daf2ea239a0f115276697f,1511171162937; _ntes_nuid=6fc3b1bb93daf2ea239a0f115276697f; __remember_me=true; MUSIC_U=93181d58e76bc8684b776ba7d9000ba337ec05c0e61b284fa5fad1e08ee7da7bec419a81eb06bd7eeb42834e2608436941049cea1c6bb9b6; __csrf=2d3fc4aaf219f561b0b598c4bef8af97; __utma=94650624.1121442284.1511171163.1511171163.1511171163.1; __utmb=94650624.6.10.1511171163; __utmc=94650624; __utmz=94650624.1511171163.1.1.utmcsr=baidu|utmccn=(organic)|utmcmd=organic',
+
+// Cookie must be supplied through environment variables.
 //             "Host": "music.163.com",
 //             "Origin": "http://music.163.com",
 //             "Pragma": "no-cache",
@@ -382,7 +384,8 @@ console.log(rule);
 //             "Accept-Encoding": "gzip, deflate, br",
 //             "Accept-Language": "zh-CN,zh;q=0.9",
 //             "Connection": "keep-alive",
-//             "Cookie": 'sid=4n7ask3x; LIVE_BUVID=16f64ca47333ec94b0e31eac1d687da8; LIVE_BUVID__ckMd5=5fcb1e582de43a7a; buvid3=0025210A-6337-4C60-B290-9FA8476A238E14579infoc; rpdid=kmkxpqkklkdosipiwoqpw; fts=1524632027; im_notify_type_3633494=0; UM_distinctid=1632989ac366f2-08da309a5bce35-f373567-1fa400-1632989ac3788b; LIVE_PLAYER_TYPE=2; bp_t_offset_3633494=128952098097933419; finger=edc6ecda; DedeUserID=3633494; DedeUserID__ckMd5=cadd309d573fc2c3; SESSDATA=07cfab6b%2C1532138180%2C81c80f2f; bili_jct=6572afacc15ced0f1b4c714e52c85266; _dfcaptcha=fc4a08a78d0653a7700975d232716544; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1528262140,1528866543,1529546195,1529654413; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1529654420',
+
+// Cookie must be supplied through environment variables.
 //             "Host": "api.live.bilibili.com",
 //             "Origin": "https://live.bilibili.com",
 //             "Referer": 'https://live.bilibili.com/p/eden/area-tags',
@@ -431,7 +434,3 @@ console.log(rule);
 app.listen(3000, function(req, res) {
    console.log('app is running at port 3000');
 });
-
-
-
-

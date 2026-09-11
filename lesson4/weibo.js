@@ -24,7 +24,7 @@ app.get("/cs", (req, res, next) => {
         'Accept-Language': 'zh-CN,zh;q=0.8',
         'Connection': 'keep-alive',
         'Cache-Control': 'max-age=0',
-        Cookie: "SINAGLOBAL=5990615888547.856.1534920679405; _s_tentry=gank.io; login_sid_t=6d7876fc2b0d45db00d93d1b4c810af5; cross_origin_proto=SSL; Ugrow-G0=169004153682ef91866609488943c77f; TC-V5-G0=7975b0b5ccf92b43930889e90d938495; Apache=1003406712671.706.1548379977812; ULV=1548379977819:6:1:1:1003406712671.706.1548379977812:1545631517933; TC-Page-G0=6fdca7ba258605061f331acb73120318; WBtopGlobal_register_version=d16df5b876e30246; SSOLoginState=1548383969; un=yojgni785968@game.weibo.com; UOR=www.css88.com,widget.weibo.com,www.baidu.com; wvr=6; wb_view_log_6685000996=1920*10801; SUBP=0033WrSXqPxfM725Ws9jqgMF55529P9D9WhoDDUyP5F4HMvFxa9Ofi8V5JpX5KMhUgL.Foqc1h-7eh541Kq2dJLoIp7LxKML1KBLBKnLxKqL1hnLBoMcSonfeh571K.c; ALF=1580282858; SCF=Ai4hHKl8qoDqGr38HDmipZwUWaCCNQhjRFT330hs2Es---iT3yLesOMepqm6rGovcBg08BzTkmTgXEMS_Ur0e64.; SUB=_2A25xVHA7DeRhGeBI41cR8C7FwjqIHXVSIObzrDV8PUNbmtAKLUrTkW9NRnqt1BEjXF1lkL9m7dmr9CM9B5rklvTz; SUHB=0KAhvgdeNWCe6O",
+        Cookie: process.env.WEIBO_COOKIE || "",
         Host: 'weibo.com',
         'Upgrade-Insecure-Requests': 1,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36'

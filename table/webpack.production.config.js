@@ -1,12 +1,15 @@
 var webpack = require("webpack");
+var path = require("path");
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
-    devtool: 'eval-source-map',
+    mode: 'production',
+    devtool: false,
     entry: __dirname + "/app/app.js",
     output: {
-        path: __dirname + '/build',
-        filename: 'bundle.js'
+        path: path.resolve(__dirname, 'build'),
+        filename: 'bundle.js',
+        clean: true
     },
     module: {
         rules: [{
@@ -18,17 +21,17 @@ module.exports = {
             },
             {
                 test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [{
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    {
                         loader: "css-loader",
                         options: {
                             modules: true
                         }
                     }, {
                         loader: 'postcss-loader'
-                    }]
-                })
+                    }
+                ]
             },
             {
                 test: /\.less$/,
@@ -42,12 +45,10 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif)$/,
-                use: [{
-                    loader: 'url-loader',
-                    options: {
-                        limit: 102400
-                    }
-                }]
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: { maxSize: 102400 }
+                }
             }
         ]
     },
@@ -56,9 +57,6 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: __dirname + "/app/index.tmpl.html" //new 一个这个插件的实例，并传入相关的参数
         }),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.optimize.UglifyJsPlugin(),
-        new ExtractTextPlugin("style.css")
+        new MiniCssExtractPlugin({ filename: "style.css" })
     ]
 };

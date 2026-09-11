@@ -1,8 +1,8 @@
 import React from 'react'
-import {render} from 'react-dom'
+import {createRoot} from 'react-dom/client'
 import Geen from './Geen'
 import './main.css'
 
 
 
-render (<Geen/>,document.getElementById('root')); 
+createRoot(document.getElementById('root')).render(<Geen/>);
