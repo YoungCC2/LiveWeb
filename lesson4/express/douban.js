@@ -28,7 +28,7 @@ app.get('/movlist', function(req, res, next) {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cookie": 'bid=oM3GbsjCiV8; _pk_id.100001.4cf6=3c5287c114dc85ef.1522065602.1.1522065602.1522065602.; _pk_ses.100001.4cf6=*; __utma=30149280.1376213044.1522065602.1522065602.1522065602.1; __utmc=30149280; __utmz=30149280.1522065602.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utmt=1; __utmb=30149280.1.10.1522065602'
+        "Cookie": process.env.DOUBAN_COOKIE || ""
     }
 
     request
@@ -115,7 +115,7 @@ const sc = [
         "Referer": "https://movie.douban.com/awards/doubanfilm_annual/1/nominees",
         "Accept-Encoding": "gzip, deflate, br",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cookie": 'bid=5hI5NKF7SOc; __utmc=30149280; ll="108309"; __utmc=223695111; ap=1; _vwo_uuid_v2=D5F79271851E9469C1DAF201C57A5AB4B|8be1cf4a2445b06d6e0346ea49065a25; _pk_ses.100001.4cf6=*; __utma=30149280.2068144489.1522056382.1522117833.1522121511.4; __utmz=30149280.1522121511.4.2.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; ps=y; __utmb=30149280.2.10.1522121511; ue="743472220@qq.com"; push_noty_num=0; push_doumail_num=0; dbcl2="75148841:4p8ot1uTuso"; ck=WmOj; __utma=223695111.741874987.1522056425.1522117833.1522122069.4; __utmb=223695111.0.10.1522122069; __utmz=223695111.1522122069.4.2.utmcsr=baidu|utmccn=(organic)|utmcmd=organic; _pk_id.100001.4cf6=7e876ee64fd47d07.1522056382.3.1522122108.1522112424.'
+        "Cookie": process.env.DOUBAN_COOKIE || ""
     }  
     
     const resUrl  = (url,cb,t) =>{
@@ -188,17 +188,7 @@ app.get('/imdb',(req, res, next)=>{
                 "q=0.8",
         "Accept-Encoding": "gzip, deflate",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cookie": "uu=BCYqGJeNNKq9FPqhLc2tM-lQ_kvvCs9C_t1GrqFsnydNNZjlgareuuk3HZnUj__l-dlqyyOH58D1%" +
-                "0D%0AdDvwC4AnCmGomz1z2CbVZyfqRZ05P1bXyO5qZA1RcvwWh5QzP1tLAA8lJ5QHwR8HjuvuXa1jhFA" +
-                "6%0D%0AeBq6I1OYODD4kvnAepZUwvb6faaU3ia4LXsJ3BLuBZ2byydABFrN3sYL39AWi2aEoRiNVhDKI" +
-                "U30%0D%0AjqGZLiYj6QoOnpHv6NGvSW0_VXJ9HSoh1EHP56lZpoKNk3dp0BuJvw%0D%0A; session-i" +
-                "d=132-3239285-4553411; session-id-time=2152837476; ubid-main=132-1381116-4697301" +
-                "; session-token=royPfxHC+EeHDcGI1D/b8kbhj3Jw4pqhcWTkWNX4/D+pmGEJwufBaxuu/HzSMzZX" +
-                "Apkw4yuq3r8X64EsJO8nmBbROJ6tJNwVh9BeAwryTbA/W5hR635g5wFWSu4a8SjUoeDU8XLJoCxROXBy" +
-                "mJXelaY/9huCmxYTpWpfmD6VtyGAg3Y8ed1NOc5Hh6jKrT3O; as=%7B%22n%22%3A%7B%22t%22%3A%" +
-                "5B0%2C0%5D%2C%22tr%22%3A%5B300%2C250%5D%2C%22in%22%3A%5B0%2C0%5D%2C%22ib%22%3A%5" +
-                "B0%2C0%5D%7D%7D; csm-hit=11H2Q51T68P56W79V4W7+s-11H2Q51T68P56W79V4W7|15221995078" +
-                "84"
+        "Cookie": process.env.IMDB_COOKIE || ""
     }
 
     const url = "http://www.imdb.com/chart/top?sort=rk,asc&mode=simple&page=1";
@@ -230,7 +220,7 @@ app.get('/imdbe',(req, res, next)=>{
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8",
         "Accept-Encoding": "gzip, deflate",
         "Accept-Language": "zh-CN,zh;q=0.9",
-        "Cookie": "uu=BCYqGJeNNKq9FPqhLc2tM-lQ_kvvCs9C_t1GrqFsnydNNZjlgareuuk3HZnUj__l-dlqyyOH58D1%0D%0AdDvwC4AnCmGomz1z2CbVZyfqRZ05P1bXyO5qZA1RcvwWh5QzP1tLAA8lJ5QHwR8HjuvuXa1jhFA6%0D%0AeBq6I1OYODD4kvnAepZUwvb6faaU3ia4LXsJ3BLuBZ2byydABFrN3sYL39AWi2aEoRiNVhDKIU30%0D%0AjqGZLiYj6QoOnpHv6NGvSW0_VXJ9HSoh1EHP56lZpoKNk3dp0BuJvw%0D%0A; session-id=132-3239285-4553411; session-id-time=2152837476; ubid-main=132-1381116-4697301; session-token=royPfxHC+EeHDcGI1D/b8kbhj3Jw4pqhcWTkWNX4/D+pmGEJwufBaxuu/HzSMzZXApkw4yuq3r8X64EsJO8nmBbROJ6tJNwVh9BeAwryTbA/W5hR635g5wFWSu4a8SjUoeDU8XLJoCxROXBymJXelaY/9huCmxYTpWpfmD6VtyGAg3Y8ed1NOc5Hh6jKrT3O; as=%7B%22n%22%3A%7B%22t%22%3A%5B0%2C0%5D%2C%22tr%22%3A%5B300%2C250%5D%2C%22in%22%3A%5B0%2C0%5D%2C%22ib%22%3A%5B0%2C0%5D%7D%7D; csm-hit=0292K3A7H7ESJVD70NK3+s-0292K3A7H7ESJVD70NK3|1522202036291"
+        "Cookie": process.env.IMDB_COOKIE || ""
     }
     const rest = (item,cb) =>{
         request

@@ -4,33 +4,36 @@
   "description": "react table",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack",
-    "server": "webpack-dev-server --open",
-    "build": "set NODE_ENV=production && webpack --config ./webpack.production.config.js --progress"
+    "test": "webpack --config ./webpack.config.js",
+    "start": "webpack --config ./webpack.config.js",
+    "server": "webpack serve --config ./webpack.config.js --open",
+    "build": "webpack --config ./webpack.production.config.js --progress"
   },
   "author": "yhyh",
   "license": "ISC",
+  "engines": {
+    "node": "^22.15.0 || ^24.0.0 || >=26.0.0"
+  },
   "dependencies": {
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
-    "autoprefixer": "^7.1.4",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.2",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.7",
-    "extract-text-webpack-plugin": "^3.0.0",
-    "file-loader": "^0.11.2",
-    "html-webpack-plugin": "^2.30.1",
-    "less": "^2.7.2",
-    "less-loader": "^4.0.5",
-    "postcss-loader": "^2.0.6",
-    "style-loader": "^0.18.2",
-    "url-loader": "^0.5.9",
-    "webpack": "^3.5.6",
-    "webpack-dev-server": "^3.1.11"
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "autoprefixer": "^10.4.21",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.4",
+    "less": "^4.4.0",
+    "less-loader": "^12.3.0",
+    "mini-css-extract-plugin": "^2.9.4",
+    "postcss": "^8.5.6",
+    "postcss-loader": "^8.1.1",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.101.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^6.0.0"
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import texts from './test'
-import styles from './geen.css';
+import './geen.css';
 import "./sty.less"
 import bgimg from './pj.png'
 

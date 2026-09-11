@@ -33,8 +33,20 @@ var param = function () {
     }
 }
 
+var wechatAppId = process.env.WECHAT_APP_ID;
+var wechatAppSecret = process.env.WECHAT_APP_SECRET;
+
+if (!wechatAppId || !wechatAppSecret) {
+    throw new Error('WECHAT_APP_ID and WECHAT_APP_SECRET are required');
+}
+
 request
-    .get("https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx5ac9c5301cbced7b&secret=0fe8b998368104a39f56d3556e42710c")
+    .get("https://api.weixin.qq.com/cgi-bin/token")
+    .query({
+        grant_type: 'client_credential',
+        appid: wechatAppId,
+        secret: wechatAppSecret
+    })
     .end(function (err, ss) {
         if (err) {
             console.log('err');

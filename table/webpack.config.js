@@ -1,16 +1,21 @@
 var webpack = require("webpack");
+var path = require("path");
 module.exports = {
+    mode: 'development',
     devtool: 'eval-source-map',
     entry: __dirname + "/app/app.js",
     output: {
-        path: __dirname + '/public',
+        path: path.resolve(__dirname, 'public'),
         filename: 'bundle.js'
     },
     devServer: {
-        contentBase: "./public",
+        static: {
+            directory: path.resolve(__dirname, 'public')
+        },
         historyApiFallback: true,
-        inline: true,
-        port: '8080'
+        port: 8080,
+        host: '127.0.0.1',
+        allowedHosts: 'auto'
     },
     module: {
         rules: [{
@@ -47,12 +52,10 @@ module.exports = {
             },
             {
                 test: /\.(png|jpg|gif)$/,
-                use: [{
-                    loader: 'url-loader',
-                    options: {
-                        limit: 102400
-                    }
-                }]
+                type: 'asset',
+                parser: {
+                    dataUrlCondition: { maxSize: 102400 }
+                }
             }
         ]
     },

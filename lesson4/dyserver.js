@@ -1,7 +1,6 @@
 var net = require('net');
 var uuid = require('node-uuid');
 var md5 = require('md5');
-var request = require('request');
 //118.118.218.253   
 var gift = require("./dygift.json");
 var streamGift = require("./dyStream.json");
@@ -10,8 +9,8 @@ var PORT = 12602; //8601,12602,12601,8602
 
 
 var  rid = "74960";
-var user = ""
-var password = "123456"
+var user = process.env.DOUYU_USER || ""
+var password = process.env.DOUYU_PASSWORD || ""
 
 function send(socket, payload) {
         var data = new Buffer(4 + 4 + 4 + payload.length + 1)
@@ -39,7 +38,7 @@ function getGroupId(roomid, callback)
 	var rt = new Date().now;
 	var devid = uuid.v4().replace(/-/g, '');
 	var vk = md5(rt + '7oE9nPEG9xXV69phU31FYCLUagKeYtsF' + devid)
-	var req = 'type@=loginreq/username@=s101yh/password@=123456/roomid@=' + 
+	var req = 'type@=loginreq/username@=' + user + '/password@=' + password + '/roomid@=' +
 		roomid + '/ct@=0/vk@=' + vk + '/devid@=' + 
 		devid + '/rt@=' + rt + '/ver=@20150929/';
 	
@@ -66,8 +65,7 @@ function getGroupId(roomid, callback)
 var socket = net.connect(PORT, HOST, function () {
     console.log('连接到服务器！');
     //登录  房间号不是固定/
-//    var req = 'type@=loginreq/username@=s101yh/password@=123456/roomid@=421065';
-    var req = `type@=loginreq/username@=s101yh/password@=123456/roomid@=${rid}/ct@=2/`;
+    var req = `type@=loginreq/username@=${user}/password@=${password}/roomid@=${rid}/ct@=2/`;
     send(socket,req);
 });
 
@@ -141,6 +139,3 @@ socket.on('data', function(data) {
 //        console.log("1"); //在这里显示其它类型的消息
     }
 })
-
-
-
